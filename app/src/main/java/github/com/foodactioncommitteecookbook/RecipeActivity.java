@@ -1,17 +1,11 @@
 package github.com.foodactioncommitteecookbook;
 
-import android.os.Bundle;
+import org.androidannotations.annotations.EActivity;
 
 /**
  * Displays a selected recipe
  */
+@EActivity(R.layout.activity_recipe)
 public class RecipeActivity extends BaseActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe);
-    }
-
 
 }

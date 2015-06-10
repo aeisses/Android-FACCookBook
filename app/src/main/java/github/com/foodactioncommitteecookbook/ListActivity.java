@@ -1,16 +1,11 @@
 package github.com.foodactioncommitteecookbook;
 
-import android.os.Bundle;
+import org.androidannotations.annotations.EActivity;
 
 /**
  * Contains a list of recipes that can be selected.
  */
+@EActivity(R.layout.activity_list)
 public class ListActivity extends BaseActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
-    }
 
 }

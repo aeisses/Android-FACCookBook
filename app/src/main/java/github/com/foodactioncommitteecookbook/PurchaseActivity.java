@@ -1,16 +1,11 @@
 package github.com.foodactioncommitteecookbook;
 
-import android.os.Bundle;
+import org.androidannotations.annotations.EActivity;
 
 /**
  * Shows recipes available for purchase.
  */
+@EActivity(R.layout.activity_purchase)
 public class PurchaseActivity extends BaseActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_purchase);
-    }
 
 }

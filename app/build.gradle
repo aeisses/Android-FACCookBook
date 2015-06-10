@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+// Which version of Android Annotations is being used in this project?
+def AAVersion = '3.3.1'
 
 android {
     compileSdkVersion 22
@@ -21,5 +25,15 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:22.1.1'
+
+    // Dependencies for Android Annotations
+    apt "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0].processResources.manifestFile
+    }
 }

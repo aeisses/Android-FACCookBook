@@ -1,17 +1,12 @@
 package github.com.foodactioncommitteecookbook;
 
-import android.os.Bundle;
+import org.androidannotations.annotations.EActivity;
 
 
 /**
  * The main screen in the application.
  */
+@EActivity(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
 
 }
