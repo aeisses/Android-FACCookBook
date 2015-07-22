@@ -18,4 +18,6 @@
 
     <string name="search_hint">Find Recipes</string>
     <string name="search_label">Search</string>
+
+    <string name="map_currentlocation">Showing your current location</string>
 </resources>

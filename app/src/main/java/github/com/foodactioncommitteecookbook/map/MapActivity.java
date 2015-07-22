@@ -1,11 +1,14 @@
 package github.com.foodactioncommitteecookbook.map;
 
+import android.location.LocationManager;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.androidannotations.annotations.AfterViews;
@@ -33,10 +36,19 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
   @Nullable
   private GoogleMap googleMap;
 
+  @Nullable
+  private android.location.Location initialLocation;
+
   @AfterViews
   public void initMap() {
     map.getMapAsync(this);
     EventBus.getDefault().register(this);
+
+    LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    String provider = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ?
+        LocationManager.GPS_PROVIDER : LocationManager.NETWORK_PROVIDER;
+    initialLocation = locationManager.getLastKnownLocation(provider);
+
   }
 
   @OptionsItem
@@ -60,6 +72,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
           .snippet(location.getMapSnippet())
           .position(location.getCoordinate());
       googleMap.addMarker(marker);
+    }
+
+    if (initialLocation == null) {
+      goToRegion(Region.Halifax);
+    } else {
+      LatLng coordinates = new LatLng(initialLocation.getLatitude(), initialLocation.getLongitude());
+      googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 9));
+      Toast.makeText(this, R.string.map_currentlocation, Toast.LENGTH_SHORT).show();
     }
   }
 

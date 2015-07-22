@@ -13,7 +13,6 @@ import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
-import github.com.foodactioncommitteecookbook.map.MapActivity_;
 import github.com.foodactioncommitteecookbook.network.RecipeRequest;
 import github.com.foodactioncommitteecookbook.network.RequestHelper;
 
@@ -83,7 +82,7 @@ public class TitleActivity extends Activity {
   }
 
   private void gotoMain() {
-    Intent intent = new Intent(this, MapActivity_.class);
+    Intent intent = new Intent(this, MainActivity_.class);
     startActivity(intent);
     finish();
   }
