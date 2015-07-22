@@ -2,4 +2,6 @@
     <string name="app_name">Food Action Committee Cookbook</string>
 
     <string name="hello_world">Hello world!</string>
+
+    <string name="loading">Loading...</string>
 </resources>

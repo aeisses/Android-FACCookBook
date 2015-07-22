@@ -30,6 +30,12 @@ dependencies {
     // Dependencies for Android Annotations
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+
+    // Volley is used for HTTP operations and image loading
+    compile 'com.mcxiaoke.volley:library:1.0.17'
+
+    // Gson used for the JSON decoding.
+    compile 'com.google.code.gson:gson:2.3.1'
 }
 
 apt {
