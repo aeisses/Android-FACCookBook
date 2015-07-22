@@ -20,4 +20,11 @@
     <string name="search_label">Search</string>
 
     <string name="map_currentlocation">Showing your current location</string>
+
+    <string name="action_search">Search</string>
+    <string name="action_favourites">Favourites</string>
+
+    <string name="tab_popular">Popular</string>
+    <string name="tab_favourites">Favourites</string>
+    <string name="tab_season">In Season</string>
 </resources>
