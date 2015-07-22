@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="github.com.foodactioncommitteecookbook"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="github.com.foodactioncommitteecookbook"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -27,13 +26,22 @@
         </activity>
 
         <activity android:name=".MainActivity_"/>
-
         <activity android:name=".ListActivity_"/>
         <activity android:name=".LocationActivity_"/>
         <activity android:name=".map.MapActivity_"/>
         <activity android:name=".PurchaseActivity_"/>
         <activity android:name=".RecipeActivity_"/>
-        <activity android:name=".SearchActivity_"/>
+        <activity
+            android:name=".SearchActivity_"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

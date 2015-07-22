@@ -38,4 +38,7 @@
     <string name="windsor">Windsor</string>
     <string name="wolfville">Wolfville</string>
     <string name="yarmouth">Yarmouth</string>
+
+    <string name="search_hint">Find Recipes</string>
+    <string name="search_label">Search</string>
 </resources>

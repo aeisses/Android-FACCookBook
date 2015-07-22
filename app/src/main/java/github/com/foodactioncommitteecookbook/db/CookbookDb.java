@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,6 +134,18 @@ public class CookbookDb extends SQLiteOpenHelper {
     } finally {
       db.endTransaction();
     }
+  }
+
+  public Cursor searchForRecipes(final String query) {
+    SQLiteDatabase db = getReadableDatabase();
+
+    String selection = CookbookContract.RecipeEntry.COLUMN_TITLE + " LIKE ?";
+    String[] args = {"%" + query + "%"};
+
+    SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+    builder.setTables(CookbookContract.RecipeEntry.TABLE_NAME);
+
+    return builder.query(db, null, selection, args, null, null, null);
   }
 
   public List<Location> getLocations() {
