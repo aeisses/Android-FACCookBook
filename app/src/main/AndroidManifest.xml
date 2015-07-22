@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="github.com.foodactioncommitteecookbook">
+<manifest
+    package="github.com.foodactioncommitteecookbook"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -15,20 +20,24 @@
             android:name=".TitleActivity_"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity_" />
+        <activity android:name=".MainActivity_"/>
 
-        <activity android:name=".ListActivity_" />
-        <activity android:name=".LocationActivity_" />
-        <activity android:name=".MapActivity_" />
-        <activity android:name=".PurchaseActivity_" />
-        <activity android:name=".RecipeActivity_" />
-        <activity android:name=".SearchActivity_" />
+        <activity android:name=".ListActivity_"/>
+        <activity android:name=".LocationActivity_"/>
+        <activity android:name=".MapActivity_"/>
+        <activity android:name=".PurchaseActivity_"/>
+        <activity android:name=".RecipeActivity_"/>
+        <activity android:name=".SearchActivity_"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBl_0P4TkaP_oe5eeL_KFPEWKOugCBhu_A"/>
     </application>
 
 </manifest>

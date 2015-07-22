@@ -25,7 +25,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.google.android.gms:play-services:7.3.0'
 
     // Dependencies for Android Annotations
     apt "org.androidannotations:androidannotations:$AAVersion"
