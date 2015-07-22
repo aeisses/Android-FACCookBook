@@ -36,6 +36,12 @@ dependencies {
 
     // Gson used for the JSON decoding.
     compile 'com.google.code.gson:gson:2.3.1'
+
+    // EventBus used for handling HTTP requests.
+    compile 'de.greenrobot:eventbus:2.4.0'
+
+    // Android logger for log messages
+    compile 'com.noveogroup.android:android-logger:1.3.5'
 }
 
 apt {

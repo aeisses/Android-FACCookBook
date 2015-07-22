@@ -23,10 +23,10 @@ public class Recipe {
     private String title;
 
     @SerializedName("searchItems")
-    private String searchItems;
+    private List<String> searchItems;
 
     @SerializedName("category")
-    private String category;
+    private List<String> category;
 
     @SerializedName("type")
     private String type;
@@ -59,11 +59,11 @@ public class Recipe {
         return title;
     }
 
-    public String getSearchItems() {
+    public List<String> getSearchItems() {
         return searchItems;
     }
 
-    public String getCategory() {
+    public List<String> getCategories() {
         return category;
     }
 

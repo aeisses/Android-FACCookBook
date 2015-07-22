@@ -11,7 +11,7 @@ public final class CookbookContract {
     }
 
     // Update this version number if you change anything else in this file.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_NAME = "FACCookbook.db";
 
@@ -25,7 +25,6 @@ public final class CookbookContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_FAVOURITE = "is_favourite";
-        public static final String COLUMN_SEARCH = "search_items";
         public static final String COLUMN_SEASON = "season";
         public static final String COLUMN_CREATED = "created";
         public static final String COLUMN_MODIFED = "last_modified";
@@ -36,7 +35,6 @@ public final class CookbookContract {
                 COLUMN_TITLE + " TEXT, " +
                 COLUMN_TYPE + " TEXT, " +
                 COLUMN_FAVOURITE + " INTEGER, " +
-                COLUMN_SEARCH + " TEXT, " +
                 COLUMN_SEASON + " TEXT, " +
                 COLUMN_CREATED + " DATETIME, " +
                 COLUMN_MODIFED + " DATETIME " +

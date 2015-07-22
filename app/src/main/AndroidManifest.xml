@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="github.com.foodactioncommitteecookbook">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="github.com.foodactioncommitteecookbook.CookbookApplication"
         android:allowBackup="true"
