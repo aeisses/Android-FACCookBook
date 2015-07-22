@@ -46,6 +46,7 @@ public final class CookbookContract {
     public static final String TABLE_NAME = "location";
     public static final String COLUMN_ID = "location_id";
     public static final String COLUMN_TITLE = "title";
+    public static final String COLUMN_ADDEDDATE = "addeddate";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
     public static final String COLUMN_ADDRESS = "address";
@@ -57,6 +58,7 @@ public final class CookbookContract {
         _ID + " INTEGER PRIMARY KEY, " +
         COLUMN_ID + " INTEGER, " +
         COLUMN_TITLE + " TEXT, " +
+        COLUMN_ADDEDDATE + " INTEGER, " +
         COLUMN_LATITUDE + " TEXT, " +
         COLUMN_LONGITUDE + " REAL, " +
         COLUMN_ADDRESS + " REAL, " +

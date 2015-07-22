@@ -144,6 +144,7 @@ public class CookbookDb extends SQLiteOpenHelper {
       locations.add(new Location(
           cursor.getInt(cursor.getColumnIndex(CookbookContract.LocationEntry.COLUMN_ID)),
           cursor.getString(cursor.getColumnIndex(CookbookContract.LocationEntry.COLUMN_TITLE)),
+          new Date(cursor.getLong(cursor.getColumnIndex(CookbookContract.LocationEntry.COLUMN_ADDEDDATE))),
           cursor.getFloat(cursor.getColumnIndex(CookbookContract.LocationEntry.COLUMN_LATITUDE)),
           cursor.getFloat(cursor.getColumnIndex(CookbookContract.LocationEntry.COLUMN_LONGITUDE)),
           cursor.getString(cursor.getColumnIndex(CookbookContract.LocationEntry.COLUMN_ADDRESS)),
@@ -162,6 +163,7 @@ public class CookbookDb extends SQLiteOpenHelper {
       ContentValues values = new ContentValues();
       values.put(CookbookContract.LocationEntry.COLUMN_ID, location.getLocationId());
       values.put(CookbookContract.LocationEntry.COLUMN_TITLE, location.getTitle());
+      values.put(CookbookContract.LocationEntry.COLUMN_ADDEDDATE, location.getAddedDate().getTime());
       values.put(CookbookContract.LocationEntry.COLUMN_LATITUDE, location.getLatitude());
       values.put(CookbookContract.LocationEntry.COLUMN_LONGITUDE, location.getLongitude());
       values.put(CookbookContract.LocationEntry.COLUMN_ADDRESS, location.getAddress());

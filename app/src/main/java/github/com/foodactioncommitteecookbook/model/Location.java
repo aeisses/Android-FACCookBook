@@ -3,6 +3,8 @@ package github.com.foodactioncommitteecookbook.model;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * Model class for Location data.
  */
@@ -13,6 +15,9 @@ public class Location {
 
   @SerializedName("title")
   private String title;
+
+  @SerializedName("addedDate")
+  private Date addedDate;
 
   @SerializedName("latitude")
   private float latitude;
@@ -32,9 +37,10 @@ public class Location {
   @SerializedName("story")
   private String story;
 
-  public Location(int locationId, String title, float latitude, float longitude, String address, String email, String phone, String story) {
+  public Location(int locationId, String title, Date addedDate, float latitude, float longitude, String address, String email, String phone, String story) {
     this.locationId = locationId;
     this.title = title;
+    this.addedDate = addedDate;
     this.latitude = latitude;
     this.longitude = longitude;
     this.address = address;
@@ -49,6 +55,10 @@ public class Location {
 
   public String getTitle() {
     return title;
+  }
+
+  public Date getAddedDate() {
+    return addedDate;
   }
 
   public float getLatitude() {

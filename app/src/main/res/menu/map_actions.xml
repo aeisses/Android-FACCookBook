@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:cookbook="http://schemas.android.com/apk/res-auto">
 
+    <!-- Action icon is from: http://www.icons4android.com/icon/1629 -->
+    <item
+        android:id="@+id/action_regions"
+        android:icon="@drawable/map_pin_action"
+        android:title="@string/regions"
+        cookbook:showAsAction="always"/>
 
 </menu>

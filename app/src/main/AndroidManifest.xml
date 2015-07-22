@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name="github.com.foodactioncommitteecookbook.CookbookApplication"
@@ -30,7 +30,7 @@
 
         <activity android:name=".ListActivity_"/>
         <activity android:name=".LocationActivity_"/>
-        <activity android:name=".MapActivity_"/>
+        <activity android:name=".map.MapActivity_"/>
         <activity android:name=".PurchaseActivity_"/>
         <activity android:name=".RecipeActivity_"/>
         <activity android:name=".SearchActivity_"/>
