@@ -1,5 +1,8 @@
 package github.com.foodactioncommitteecookbook.map;
 
+import android.support.annotation.Nullable;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -11,6 +14,7 @@ import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 
+import de.greenrobot.event.EventBus;
 import github.com.foodactioncommitteecookbook.BaseActivity;
 import github.com.foodactioncommitteecookbook.R;
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
@@ -26,9 +30,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
   @FragmentById
   MapFragment map;
 
+  @Nullable
+  private GoogleMap googleMap;
+
   @AfterViews
   public void initMap() {
     map.getMapAsync(this);
+    EventBus.getDefault().register(this);
   }
 
   @OptionsItem
@@ -38,7 +46,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
   }
 
   @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    EventBus.getDefault().unregister(this);
+  }
+
+  @Override
   public void onMapReady(GoogleMap googleMap) {
+    this.googleMap = googleMap;
     for (Location location : CookbookDb.instance().getLocations()) {
       MarkerOptions marker = new MarkerOptions()
           .title(location.getTitle())
@@ -46,5 +61,18 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
           .position(location.getCoordinate());
       googleMap.addMarker(marker);
     }
+  }
+
+  public void goToRegion(Region region) {
+    if (googleMap == null) {
+      return;
+    }
+
+    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(region.getCoordinates(), region.getZoom()));
+  }
+
+  @SuppressWarnings("unused")
+  public void onEvent(final RegionSelectedEvent event) {
+    goToRegion(event.getRegion());
   }
 }

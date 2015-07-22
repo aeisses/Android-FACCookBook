@@ -7,37 +7,14 @@
 
     <string name="regions">Regions</string>
 
-    <string name="amherst">Amherst</string>
-    <string name="antigonish">Antigonish</string>
-    <string name="berwick">Berwick</string>
-    <string name="bridgetown">Bridgetown</string>
-    <string name="bridgewater">Bridgewater</string>
-    <string name="chester">Chester</string>
-    <string name="digby">Digby</string>
-    <string name="enfield">Enfield</string>
-    <string name="glace_bay">Glace Bay</string>
-    <string name="greenwood">Greenwood</string>
-    <string name="halifax">Halifax</string>
-    <string name="hantsport">Hantsport</string>
-    <string name="inverness">Inverness</string>
-    <string name="kentville">Kentville</string>
-    <string name="lake_echo">Lake Echo</string>
-    <string name="liverpool">Liverpool</string>
-    <string name="lunenburg">Lunenburg</string>
-    <string name="middleton">Middleton</string>
-    <string name="new_gasgow">New Glasgow</string>
-    <string name="new_waterford">New Waterford</string>
-    <string name="oxford">Oxford</string>
-    <string name="parrsboro">Parrsboro</string>
-    <string name="pictou">Pictou</string>
-    <string name="port_hawkesbury">Port Hawkesbury</string>
-    <string name="shelburne">Shelburne</string>
-    <string name="springhill">Springhill</string>
-    <string name="sydney">Sydney</string>
-    <string name="truro">Truro</string>
-    <string name="windsor">Windsor</string>
-    <string name="wolfville">Wolfville</string>
-    <string name="yarmouth">Yarmouth</string>
+    <string name="region_antigonish">Antigonish</string>
+    <string name="region_southshore">South Shore</string>
+    <string name="region_easternshore">Eastern Shore</string>
+    <string name="region_northnova">Northern Nova Scotia</string>
+    <string name="region_halifax">Halifax</string>
+    <string name="region_annapolisvalley">Annapolis Valley</string>
+    <string name="region_capebreton">Cape Breton</string>
+    <string name="region_yarmouth">Yarmouth</string>
 
     <string name="search_hint">Find Recipes</string>
     <string name="search_label">Search</string>

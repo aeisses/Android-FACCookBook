@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 
@@ -48,11 +48,11 @@ public class RegionSelectDialogFragment extends DialogFragment {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       if (convertView == null) {
-        convertView = LayoutInflater.from(this.getContext()).inflate(android.R.layout.simple_list_item_single_choice, parent, false);
+        convertView = LayoutInflater.from(this.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
       }
 
       Region region = getItem(position);
-      CheckedTextView textView = (CheckedTextView) convertView.findViewById(android.R.id.text1);
+      TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
       textView.setText(this.getContext().getText(region.getResourceId()));
 
       return convertView;
