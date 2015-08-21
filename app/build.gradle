@@ -1,8 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-
-// Which version of Android Annotations is being used in this project?
-def AAVersion = '3.3.1'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 22
@@ -15,11 +12,21 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
     }
 }
 
@@ -28,9 +35,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.google.android.gms:play-services:7.3.0'
 
-    // Dependencies for Android Annotations
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    // Butterknife for view/method binding
+    compile 'com.jakewharton:butterknife:7.0.1'
 
     // Volley is used for HTTP operations and image loading
     compile 'com.mcxiaoke.volley:library:1.0.17'
@@ -41,12 +47,22 @@ dependencies {
     // EventBus used for handling HTTP requests.
     compile 'de.greenrobot:eventbus:2.4.0'
 
-    // Android logger for log messages
-    compile 'com.noveogroup.android:android-logger:1.3.5'
+    // Timber for log messages
+    compile 'com.jakewharton.timber:timber:3.1.0'
 }
 
-apt {
-    arguments {
-        androidManifestFile variant.outputs[0].processResources.manifestFile
-    }
+String java8 = getJavaVersion(8)
+String java7 = getJavaVersion(7)
+retrolambda {
+    jdk java8
+    oldJdk java7
+    javaVersion JavaVersion.VERSION_1_7
+}
+
+String getJavaVersion(Integer v) {
+    def sout = new StringBuffer()
+    def proc = "/usr/libexec/java_home -v 1.$v".execute()
+    proc.consumeProcessOutput(sout, new StringBuffer())
+    proc.waitForOrKill(1000)
+    return sout.toString().replace("\n", "").replace("\r", "")
 }

@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
  */
 public final class CookbookContract {
 
-  private CookbookContract () {
+  private CookbookContract() {
   }
 
   // Update this version number if you change anything else in this file.
@@ -54,10 +54,11 @@ public final class CookbookContract {
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
         _ID + " INTEGER PRIMARY KEY, " +
-        "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + ")," +
+        COLUMN_RECIPE_ID + " INTEGER NOT NULL, " +
         COLUMN_AMOUNT + " TEXT, " +
-        COLUMN_INGREDIENT + " TEXT)";
-    
+        COLUMN_INGREDIENT + " TEXT, " +
+        "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + "))";
+
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 

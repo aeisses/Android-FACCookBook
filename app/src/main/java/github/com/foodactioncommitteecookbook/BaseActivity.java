@@ -21,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.options_menu_search).getActionView();
 
-        ComponentName componentName = new ComponentName(this, SearchActivity_.class);
+        ComponentName componentName = new ComponentName(this, SearchActivity.class);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
 
         return super.onCreateOptionsMenu(menu);
@@ -38,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void openFavourites() {
-        Intent intent = new Intent(this, ListActivity_.class);
+        Intent intent = new Intent(this, ListActivity.class);
         startActivity(intent);
     }
 }

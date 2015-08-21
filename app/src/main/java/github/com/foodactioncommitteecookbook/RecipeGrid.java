@@ -9,16 +9,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import timber.log.Timber;
+
 
 public class RecipeGrid extends GridView {
-
-  private static final Logger log = LoggerFactory.getLogger(RecipeGrid.class);
 
   @Retention(RetentionPolicy.SOURCE)
   @IntDef({RECIPES_RANDOM, RECIPES_NEWEST})
@@ -33,11 +30,11 @@ public class RecipeGrid extends GridView {
   private int recipeSet = RECIPES_RANDOM;
   private RecipeGridViewAdapter recipeGridViewAdapter;
 
-  public RecipeGrid (Context context) {
+  public RecipeGrid(Context context) {
     this(context, null);
   }
 
-  public RecipeGrid (final Context context, AttributeSet attrs) {
+  public RecipeGrid(final Context context, AttributeSet attrs) {
     super(context, attrs);
 
     if (attrs != null) {
@@ -48,7 +45,7 @@ public class RecipeGrid extends GridView {
         recipeSet = a.getInt(R.styleable.RecipesGrid_sorted_by, RECIPES_RANDOM);
 
       } catch (Exception e) {
-        log.warn("Failed to load custom attributes: {}", e);
+        Timber.w("Failed to load custom attributes: {}", e);
       }
 
       a.recycle();
@@ -58,7 +55,7 @@ public class RecipeGrid extends GridView {
     setAdapter(recipeGridViewAdapter);
 
     setOnItemClickListener(new OnItemClickListener() {
-      public void onItemClick (AdapterView<?> parent, View v, int position, long id) {
+      public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         RecipeItem item = (RecipeItem) parent.getItemAtPosition(position);
 
         //Create intent

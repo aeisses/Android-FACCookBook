@@ -1,18 +1,17 @@
 package github.com.foodactioncommitteecookbook;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Contains a list of recipes that can be selected.
  */
-@EActivity(R.layout.activity_list)
 public class ListActivity extends BaseActivity {
 
     public enum Page {
@@ -27,11 +26,16 @@ public class ListActivity extends BaseActivity {
         }
     }
 
-    @ViewById
+    @Bind(R.id.listPager)
     ViewPager listPager;
 
-    @AfterViews
-    public void init() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_list);
+
+        ButterKnife.bind(this);
+
         RecipeListPagerAdapter adapter = new RecipeListPagerAdapter(getSupportFragmentManager());
         listPager.setAdapter(adapter);
     }

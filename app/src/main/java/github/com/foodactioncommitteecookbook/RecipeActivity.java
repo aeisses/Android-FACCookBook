@@ -1,47 +1,45 @@
 package github.com.foodactioncommitteecookbook;
 
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.Extra;
-import org.androidannotations.annotations.ViewById;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import github.com.foodactioncommitteecookbook.model.Recipe;
 import github.com.foodactioncommitteecookbook.network.RequestHelper;
+import timber.log.Timber;
 
 /**
  * Displays a selected recipe
  */
-@EActivity(R.layout.activity_recipe)
 public class RecipeActivity extends BaseActivity {
-  private static final Logger log = LoggerFactory.getLogger(RecipeActivity_.class);
 
   final static String INTENT_RECIPE = "recipe";
 
-  @Extra(INTENT_RECIPE)
   Recipe recipe;
+  @Bind(R.id.recipe_title) TextView titleView;
+  @Bind(R.id.recipe_image) ImageView imageView;
 
-  @ViewById(R.id.recipe_title)
-  TextView titleView;
+  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_recipe);
+    ButterKnife.bind(this);
 
-  @ViewById(R.id.recipe_image)
-  ImageView imageView;
+    Intent intent = getIntent();
+    recipe = (Recipe) intent.getSerializableExtra(INTENT_RECIPE);
 
-  @AfterViews
-  void updateRecipe () {
     try {
       Typeface timelessTypeface = Typeface.createFromAsset(getAssets(), "fonts/Timeless.ttf");
       titleView.setTypeface(timelessTypeface);
 
     } catch (Exception e) {
-      log.warn("Unable to use custom font in recipe name.\n{}", e);
+      Timber.w("Unable to use custom font in recipe name.\n{}", e);
     }
     titleView.setTextSize(24);
     titleView.setText(recipe.getTitle());

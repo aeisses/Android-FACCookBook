@@ -14,17 +14,13 @@ import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
 import github.com.foodactioncommitteecookbook.model.Recipe;
 import github.com.foodactioncommitteecookbook.network.RequestHelper;
+import timber.log.Timber;
 
 
 public class RecipeView extends ImageView {
-
-  private static final Logger log = LoggerFactory.getLogger(RecipeView.class);
 
   private Recipe recipe;
 
@@ -34,15 +30,15 @@ public class RecipeView extends ImageView {
   private Point recipeNameOrigin;
   private int recipeNamePadding;
 
-  public RecipeView (Context context) {
+  public RecipeView(Context context) {
     this(context, null);
   }
 
-  public RecipeView (Context context, AttributeSet attrs) {
+  public RecipeView(Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public RecipeView (final Context context, AttributeSet attrs, int defStyle) {
+  public RecipeView(final Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
 
     if (attrs != null) {
@@ -64,7 +60,7 @@ public class RecipeView extends ImageView {
       textPaint.setTypeface(timelessTypeface);
 
     } catch (Exception e) {
-      log.warn("Unable to use custom font in recipe name.\n{}", e);
+      Timber.w("Unable to use custom font in recipe name.\n{}", e);
     }
 
     rectPaint = new Paint();
@@ -75,9 +71,9 @@ public class RecipeView extends ImageView {
 
     setOnClickListener(new OnClickListener() {
       @Override
-      public void onClick (View v) {
-        Intent recipeIntent = new Intent(context, RecipeActivity_.class);
-        recipeIntent.putExtra(RecipeActivity_.INTENT_RECIPE, recipe);
+      public void onClick(View v) {
+        Intent recipeIntent = new Intent(context, RecipeActivity.class);
+        recipeIntent.putExtra(RecipeActivity.INTENT_RECIPE, recipe);
 
         context.startActivity(recipeIntent);
       }
@@ -85,7 +81,7 @@ public class RecipeView extends ImageView {
   }
 
   @Override
-  protected void onSizeChanged (int w, int h, int oldw, int oldh) {
+  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     int paddingLeft = getPaddingLeft();
     int paddingTop = getPaddingTop();
     int paddingRight = getPaddingRight();
@@ -125,7 +121,7 @@ public class RecipeView extends ImageView {
   }
 
   @Override
-  protected void onDraw (Canvas canvas) {
+  protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
 
     canvas.drawRect(recipeNameRect, rectPaint);
@@ -139,7 +135,7 @@ public class RecipeView extends ImageView {
     canvas.drawText(getRecipeTitle(), recipeNameOrigin.x, recipeNameOrigin.y, textPaint);
   }
 
-  public void setRecipeId (int recipeId) {
+  public void setRecipeId(int recipeId) {
     Recipe newRecipe = CookbookDb.instance().getRecipe(recipeId);
 
     if (newRecipe == null) {
@@ -155,7 +151,7 @@ public class RecipeView extends ImageView {
     onSizeChanged(getWidth(), getHeight(), 0, 0);
   }
 
-  private String getRecipeTitle () {
+  private String getRecipeTitle() {
     if (recipe != null) {
       return recipe.getTitle();
     } else {

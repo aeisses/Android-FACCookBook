@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -18,40 +15,39 @@ import java.util.List;
 
 import github.com.foodactioncommitteecookbook.model.Location;
 import github.com.foodactioncommitteecookbook.model.Recipe;
+import timber.log.Timber;
 
 /**
  * SQLiteOpenHelper implementation for interacting with the recipe cache.
  */
 public class CookbookDb extends SQLiteOpenHelper {
 
-  private static final Logger log = LoggerFactory.getLogger(CookbookDb.class);
-
   private static final DateFormat dateFormat = DateFormat.getDateInstance();
 
   private static CookbookDb INSTANCE;
 
-  public static CookbookDb create (final Context context) {
+  public static CookbookDb create(final Context context) {
     INSTANCE = new CookbookDb(context);
     return INSTANCE;
   }
 
-  public static CookbookDb instance () {
+  public static CookbookDb instance() {
     return INSTANCE;
   }
 
-  private CookbookDb (final Context context) {
+  private CookbookDb(final Context context) {
     super(context, CookbookContract.DATABASE_NAME, null, CookbookContract.DATABASE_VERSION);
   }
 
   @Override
-  public void onCreate (SQLiteDatabase db) {
+  public void onCreate(SQLiteDatabase db) {
     db.execSQL(CookbookContract.SQL_CREATE_ENTRIES);
     db.execSQL(CookbookContract.LocationEntry.CREATE_TABLE);
     db.execSQL(CookbookContract.IngredientEntry.CREATE_TABLE);
   }
 
   @Override
-  public void onUpgrade (SQLiteDatabase db, int oldVersion, int newVersion) {
+  public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     // This database is only a cache for online data, so its upgrade policy is
     // to simply to discard the data and start over.
     db.execSQL(CookbookContract.SQL_DELETE_ENTRIES);
@@ -61,7 +57,7 @@ public class CookbookDb extends SQLiteOpenHelper {
   }
 
   @Override
-  public void onDowngrade (SQLiteDatabase db, int oldVersion, int newVersion) {
+  public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     // Just do the same thing as an upgrade; drop and recreate the database.
     onUpgrade(db, oldVersion, newVersion);
   }
@@ -70,7 +66,7 @@ public class CookbookDb extends SQLiteOpenHelper {
   // Query Helpers
   //----------------------------------------------------------------------------------------------
 
-  public Date getLastModifiedDate () {
+  public Date getLastModifiedDate() {
     SQLiteDatabase db = getReadableDatabase();
 
     String[] projection = {
@@ -92,14 +88,14 @@ public class CookbookDb extends SQLiteOpenHelper {
     return null;
   }
 
-  public void insertAll (final List<Recipe> recipes) {
+  public void insertAll(final List<Recipe> recipes) {
     for (Recipe recipe : recipes) {
       insert(recipe);
     }
-    log.trace("Finished inserting recipes");
+    Timber.v("Finished inserting recipes");
   }
 
-  public void insert (final Recipe recipe) {
+  public void insert(final Recipe recipe) {
     SQLiteDatabase db = getWritableDatabase();
 
     db.beginTransaction();
@@ -144,7 +140,7 @@ public class CookbookDb extends SQLiteOpenHelper {
     }
   }
 
-  public Recipe getRecipe (int recipeId) {
+  public Recipe getRecipe(int recipeId) {
     SQLiteDatabase db = getWritableDatabase();
 
     String[] projection = {
@@ -181,7 +177,7 @@ public class CookbookDb extends SQLiteOpenHelper {
     return null;
   }
 
-  public Cursor searchForRecipes (final String query) {
+  public Cursor searchForRecipes(final String query) {
     SQLiteDatabase db = getReadableDatabase();
 
     String selection = CookbookContract.RecipeEntry.COLUMN_TITLE + " LIKE ?";
@@ -193,7 +189,7 @@ public class CookbookDb extends SQLiteOpenHelper {
     return builder.query(db, null, selection, args, null, null, null);
   }
 
-  public List<Location> getLocations () {
+  public List<Location> getLocations() {
     SQLiteDatabase db = getReadableDatabase();
     Cursor cursor = db.query(CookbookContract.LocationEntry.TABLE_NAME, null, null, null, null, null, null);
 
@@ -215,7 +211,7 @@ public class CookbookDb extends SQLiteOpenHelper {
     return locations;
   }
 
-  public void insertLocations (final List<Location> locations) {
+  public void insertLocations(final List<Location> locations) {
     SQLiteDatabase db = getWritableDatabase();
     for (Location location : locations) {
       ContentValues values = new ContentValues();

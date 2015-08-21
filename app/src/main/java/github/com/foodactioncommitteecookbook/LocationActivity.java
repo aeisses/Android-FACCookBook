@@ -1,11 +1,14 @@
 package github.com.foodactioncommitteecookbook;
 
-import org.androidannotations.annotations.EActivity;
+import android.os.Bundle;
 
 /**
  * Displays information about a selected local food location.
  */
-@EActivity(R.layout.activity_location)
 public class LocationActivity extends BaseActivity {
-
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_location);
+    }
 }
