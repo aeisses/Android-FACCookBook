@@ -1,0 +1,5 @@
+<resources>
+  <declare-styleable name="RecipeView">
+    <attr name="recipeId" format="integer"/>
+  </declare-styleable>
+</resources>
