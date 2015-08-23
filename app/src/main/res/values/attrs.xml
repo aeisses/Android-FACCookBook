@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="RecipesGrid">
+    <attr name="sorted_by" format="integer"/>
+  </declare-styleable>
+</resources>

@@ -24,7 +24,7 @@ public class RecipeRequest extends Request<List<Recipe>> {
     private Gson gson = new GsonBuilder().setDateFormat("MM:dd:yyyy").create();
 
     public RecipeRequest() {
-        super(Method.GET, "https://dl.dropboxusercontent.com/u/95002502/foundation/recipies.json", new Response.ErrorListener() {
+        super(Method.GET, "https://dl.dropboxusercontent.com/u/10173737/Cookbook/recipes.json", new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 EventBus.getDefault().postSticky(new ErrorEvent(error));

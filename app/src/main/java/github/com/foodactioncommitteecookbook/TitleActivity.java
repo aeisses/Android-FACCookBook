@@ -2,6 +2,7 @@ package github.com.foodactioncommitteecookbook;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
+import github.com.foodactioncommitteecookbook.network.FeaturedRecipeRequest;
 import github.com.foodactioncommitteecookbook.network.RecipeRequest;
 import github.com.foodactioncommitteecookbook.network.RequestHelper;
 
@@ -25,8 +27,12 @@ public class TitleActivity extends Activity {
 
   private static final Logger log = LoggerFactory.getLogger(TitleActivity_.class);
 
+  private boolean updatedRecipes;
+  private boolean updatedFeaturedRecipe;
+  private int featuredRecipe;
+
   @AfterViews
-  public void init() {
+  public void init () {
     EventBus.getDefault().registerSticky(this);
 
     if (isFinishing()) {
@@ -45,46 +51,82 @@ public class TitleActivity extends Activity {
     } else {
       fetchRecipesSince(lastModified);
     }
+
+    fetchFeaturedRecipe();
   }
 
   @Override
-  protected void onDestroy() {
+  protected void onDestroy () {
     super.onDestroy();
     EventBus.getDefault().unregister(this);
   }
 
-  private void fetchAllRecipes() {
+  private void fetchAllRecipes () {
     log.trace("Fetching all recipes");
     RecipeRequest request = new RecipeRequest();
     RequestHelper.instance().send(request);
   }
 
-  private void fetchRecipesSince(final Date date) {
+  private void fetchRecipesSince (final Date date) {
     log.trace("Fetching new recipes");
     // TODO fetch updated recipes.
-    gotoMain();
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run () {
+        updatedRecipes = true;
+        gotoMain();
+      }
+    }, 1000);
   }
 
+  private void fetchFeaturedRecipe () {
+    log.trace("Fetching featured recipe");
+    FeaturedRecipeRequest request = new FeaturedRecipeRequest();
+    RequestHelper.instance().send(request);
+  }
+
+
   @SuppressWarnings("unused")
-  public void onEvent(RecipeRequest.CompleteEvent event) {
+  public void onEvent (RecipeRequest.CompleteEvent event) {
     CookbookDb.instance().insertAll(event.getRecipes());
 
     log.debug("Imported recipes. Launching main activity");
+    updatedRecipes = true;
     gotoMain();
   }
 
   @SuppressWarnings("unused")
-  public void onEvent(RecipeRequest.ErrorEvent event) {
+  public void onEvent (FeaturedRecipeRequest.CompleteEvent event) {
+    log.debug("got featured recipe");
+    updatedFeaturedRecipe = true;
+    featuredRecipe = event.getFeaturedId();
+    gotoMain();
+  }
+
+
+  @SuppressWarnings("unused")
+  public void onEvent (RecipeRequest.ErrorEvent event) {
     //noinspection ThrowableResultOfMethodCallIgnored
     log.error(event.getVolleyError().toString());
     Toast.makeText(this, "Unable to fetch recipes", Toast.LENGTH_LONG).show();
-    finish();
+    gotoMain();
   }
 
-  private void gotoMain() {
-    Intent intent = new Intent(this, MainActivity_.class);
-    startActivity(intent);
-    finish();
+  @SuppressWarnings("unused")
+  public void onEvent (FeaturedRecipeRequest.ErrorEvent event) {
+    //noinspection ThrowableResultOfMethodCallIgnored
+    log.error(event.getVolleyError().toString());
+    Toast.makeText(this, "Unable to fetch featured recipe", Toast.LENGTH_LONG).show();
+    gotoMain();
   }
 
+  private void gotoMain () {
+    if (updatedRecipes && updatedFeaturedRecipe) {
+      Intent intent = new Intent(this, MainActivity_.class);
+      intent.putExtra(MainActivity_.FEATURED_RECIPE_ID, featuredRecipe);
+
+      startActivity(intent);
+      finish();
+    }
+  }
 }

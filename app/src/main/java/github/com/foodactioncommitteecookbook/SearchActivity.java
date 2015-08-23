@@ -21,38 +21,38 @@ import github.com.foodactioncommitteecookbook.db.CookbookDb;
 @EActivity(R.layout.activity_search)
 public class SearchActivity extends BaseActivity {
 
-    private static Logger log = LoggerFactory.getLogger(SearchActivity_.class);
+  private static Logger log = LoggerFactory.getLogger(SearchActivity_.class);
 
-    @ViewById
-    ListView searchList;
+  @ViewById
+  ListView searchList;
 
-    @AfterViews
-    protected void init() {
-        handleIntent(getIntent());
+  @AfterViews
+  protected void init () {
+    handleIntent(getIntent());
+  }
+
+  @Override
+  protected void onNewIntent (Intent intent) {
+    handleIntent(intent);
+  }
+
+  private void handleIntent (final Intent intent) {
+    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+      String query = intent.getStringExtra(SearchManager.QUERY);
+      log.trace("Searching for {}", query);
+
+      Cursor cursor = CookbookDb.instance().searchForRecipes(query);
+
+      String[] columns = {
+          CookbookContract.RecipeEntry.COLUMN_TITLE
+      };
+
+      int[] toViews = {
+          R.id.main_activity_recipe_grid
+      };
+
+      SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.recipe_item_layout, cursor, columns, toViews, 0);
+      searchList.setAdapter(adapter);
     }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
-
-    private void handleIntent(final Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            log.trace("Searching for {}", query);
-
-            Cursor cursor = CookbookDb.instance().searchForRecipes(query);
-
-            String[] columns = {
-                    CookbookContract.RecipeEntry.COLUMN_TITLE
-            };
-
-            int[] toViews = {
-                    R.id.recipe_title
-            };
-
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.item_recipe, cursor, columns, toViews, 0);
-            searchList.setAdapter(adapter);
-        }
-    }
+  }
 }

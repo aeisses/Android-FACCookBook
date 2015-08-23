@@ -27,7 +27,7 @@ public final class CookbookContract {
     public static final String COLUMN_FAVOURITE = "is_favourite";
     public static final String COLUMN_SEASON = "season";
     public static final String COLUMN_CREATED = "created";
-    public static final String COLUMN_MODIFED = "last_modified";
+    public static final String COLUMN_MODIFIED = "last_modified";
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
         _ID + " INTEGER PRIMARY KEY, " +
@@ -37,7 +37,7 @@ public final class CookbookContract {
         COLUMN_FAVOURITE + " INTEGER, " +
         COLUMN_SEASON + " TEXT, " +
         COLUMN_CREATED + " DATETIME, " +
-        COLUMN_MODIFED + " DATETIME " +
+        COLUMN_MODIFIED + " DATETIME " +
         ")";
 
   }
