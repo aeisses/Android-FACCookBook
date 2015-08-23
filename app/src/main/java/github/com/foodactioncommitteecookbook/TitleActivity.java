@@ -76,7 +76,7 @@ public class TitleActivity extends Activity {
         updatedRecipes = true;
         gotoMain();
       }
-    }, 1000);
+    }, 2000);
   }
 
   private void fetchFeaturedRecipe () {

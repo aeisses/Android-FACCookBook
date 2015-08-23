@@ -47,6 +47,7 @@ public class CookbookDb extends SQLiteOpenHelper {
   public void onCreate (SQLiteDatabase db) {
     db.execSQL(CookbookContract.SQL_CREATE_ENTRIES);
     db.execSQL(CookbookContract.LocationEntry.CREATE_TABLE);
+    db.execSQL(CookbookContract.IngredientEntry.CREATE_TABLE);
   }
 
   @Override
@@ -55,6 +56,7 @@ public class CookbookDb extends SQLiteOpenHelper {
     // to simply to discard the data and start over.
     db.execSQL(CookbookContract.SQL_DELETE_ENTRIES);
     db.execSQL(CookbookContract.LocationEntry.DROP_TABLE);
+    db.execSQL(CookbookContract.IngredientEntry.DROP_TABLE);
     onCreate(db);
   }
 
@@ -110,9 +112,10 @@ public class CookbookDb extends SQLiteOpenHelper {
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_TYPE, recipe.getType());
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_SEASON, recipe.getSeason());
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_FAVOURITE, false);
+      recipeValues.put(CookbookContract.RecipeEntry.COLUMN_TYPE, recipe.getType());
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_CREATED, dateFormat.format(recipe.getAddedDate()));
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_MODIFIED, dateFormat.format(recipe.getUpdatedDate()));
-      db.insert(CookbookContract.RecipeEntry.TABLE_NAME, "null", recipeValues);
+      long recipeId = db.insert(CookbookContract.RecipeEntry.TABLE_NAME, "null", recipeValues);
 
       // Insert the search items.
       // TODO
@@ -121,7 +124,13 @@ public class CookbookDb extends SQLiteOpenHelper {
       // TODO
 
       // Insert the ingredients.
-      // TODO
+      for (Recipe.Ingredient ingredient : recipe.getIngredients()) {
+        ContentValues ingredientValues = new ContentValues();
+        ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_AMOUNT, ingredient.getAmount());
+        ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_INGREDIENT, ingredient.getIngredient());
+        db.insert(CookbookContract.IngredientEntry.TABLE_NAME, "null", ingredientValues);
+      }
 
       // Insert the directions.
       // TODO

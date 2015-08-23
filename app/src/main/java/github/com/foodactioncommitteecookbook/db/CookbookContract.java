@@ -7,17 +7,22 @@ import android.provider.BaseColumns;
  */
 public final class CookbookContract {
 
-  private CookbookContract() {
+  private CookbookContract () {
   }
 
   // Update this version number if you change anything else in this file.
-  public static final int DATABASE_VERSION = 3;
+  public static final int DATABASE_VERSION = 4;
 
   public static final String DATABASE_NAME = "FACCookbook.db";
 
-  public static final String SQL_CREATE_ENTRIES = RecipeEntry.CREATE_TABLE;
+  public static final String SQL_CREATE_ENTRIES = RecipeEntry.CREATE_TABLE + ";"
+      + IngredientEntry.CREATE_TABLE + ";"
+      + LocationEntry.CREATE_TABLE;
 
-  public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + CookbookContract.RecipeEntry.TABLE_NAME;
+  private static final String DELETE = "DROP TABLE IF EXISTS ";
+  public static final String SQL_DELETE_ENTRIES = DELETE + CookbookContract.RecipeEntry.TABLE_NAME + ";"
+      + DELETE + IngredientEntry.TABLE_NAME + ";"
+      + DELETE + LocationEntry.TABLE_NAME;
 
   public static abstract class RecipeEntry implements BaseColumns {
     public static final String TABLE_NAME = "recipe";
@@ -39,7 +44,21 @@ public final class CookbookContract {
         COLUMN_CREATED + " DATETIME, " +
         COLUMN_MODIFIED + " DATETIME " +
         ")";
+  }
 
+  public static abstract class IngredientEntry implements BaseColumns {
+    public static final String TABLE_NAME = "ingredient";
+    public static final String COLUMN_RECIPE_ID = "recipe_id";
+    public static final String COLUMN_AMOUNT = "amount";
+    public static final String COLUMN_INGREDIENT = "ingredient";
+
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+        _ID + " INTEGER PRIMARY KEY, " +
+        "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + ")," +
+        COLUMN_AMOUNT + " TEXT, " +
+        COLUMN_INGREDIENT + " TEXT)";
+    
+    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 
   public static abstract class LocationEntry implements BaseColumns {

@@ -25,27 +25,20 @@
     </activity>
 
     <activity
-      android:name=".MainActivity_"
-      android:label="@string/main_activity_label"/>
+      android:name=".MainActivity_"/>
 
     <activity
-      android:name=".ListActivity_"
-      android:label="@string/main_activity_label"/>
+      android:name=".ListActivity_"/>
     <activity
-      android:name=".LocationActivity_"
-      android:label="@string/main_activity_label"/>
+      android:name=".LocationActivity_"/>
     <activity
-      android:name=".map.MapActivity_"
-      android:label="@string/main_activity_label"/>
+      android:name=".map.MapActivity_"/>
     <activity
-      android:name=".PurchaseActivity_"
-      android:label="@string/main_activity_label"/>
+      android:name=".PurchaseActivity_"/>
     <activity
-      android:name=".RecipeActivity_"
-      android:label="@string/main_activity_label"/>
+      android:name=".RecipeActivity_"/>
     <activity
       android:name=".SearchActivity_"
-      android:label="@string/main_activity_label"
       android:launchMode="singleTop">
       <intent-filter>
         <action android:name="android.intent.action.SEARCH"/>
