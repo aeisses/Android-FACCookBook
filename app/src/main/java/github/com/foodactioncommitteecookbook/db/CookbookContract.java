@@ -11,19 +11,30 @@ public final class CookbookContract {
   }
 
   // Update this version number if you change anything else in this file.
-  public static final int DATABASE_VERSION = 4;
+  public static final int DATABASE_VERSION = 6;
 
   public static final String DATABASE_NAME = "FACCookbook.db";
 
   public static final String SQL_CREATE_ENTRIES = RecipeEntry.CREATE_TABLE + ";"
       + IngredientEntry.CREATE_TABLE + ";"
+      + DirectionEntry.CREATE_TABLE + ";"
+      + SearchItemEntry.CREATE_TABLE + ";"
+      + CategoryEntry.CREATE_TABLE + ";"
+      + NoteEntry.CREATE_TABLE + ";"
       + LocationEntry.CREATE_TABLE;
 
   private static final String DELETE = "DROP TABLE IF EXISTS ";
   public static final String SQL_DELETE_ENTRIES = DELETE + CookbookContract.RecipeEntry.TABLE_NAME + ";"
       + DELETE + IngredientEntry.TABLE_NAME + ";"
+      + DELETE + DirectionEntry.TABLE_NAME + ";"
+      + DELETE + SearchItemEntry.TABLE_NAME + ";"
+      + DELETE + CategoryEntry.TABLE_NAME + ";"
+      + DELETE + NoteEntry.TABLE_NAME + ";"
       + DELETE + LocationEntry.TABLE_NAME;
 
+  /**
+   * Recipes
+   */
   public static abstract class RecipeEntry implements BaseColumns {
     public static final String TABLE_NAME = "recipe";
     public static final String COLUMN_ID = "recipe_id";
@@ -46,6 +57,9 @@ public final class CookbookContract {
         ")";
   }
 
+  /**
+   * Ingredients
+   */
   public static abstract class IngredientEntry implements BaseColumns {
     public static final String TABLE_NAME = "ingredient";
     public static final String COLUMN_RECIPE_ID = "recipe_id";
@@ -58,10 +72,72 @@ public final class CookbookContract {
         COLUMN_AMOUNT + " TEXT, " +
         COLUMN_INGREDIENT + " TEXT, " +
         "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + "))";
-
-    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 
+  /**
+   * Directions
+   */
+  public static abstract class DirectionEntry implements BaseColumns {
+    public static final String TABLE_NAME = "direction";
+    public static final String COLUMN_RECIPE_ID = "recipe_id";
+    public static final String COLUMN_DIRECTION = "direction";
+
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+        _ID + " INTEGER PRIMARY_KEY, " +
+        COLUMN_RECIPE_ID + " INTEGER NOT NULL, " +
+        COLUMN_DIRECTION + " TEXT, " +
+        "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + "))";
+  }
+
+  /**
+   * SearchItems
+   */
+  public static abstract class SearchItemEntry implements BaseColumns {
+    public static final String TABLE_NAME = "searchItem";
+    public static final String COLUMN_RECIPE_ID = "recipe_id";
+    public static final String COLUMN_SEARCH_ITEM = "searchItem";
+
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+        _ID + " INTEGER PRIMARY_KEY, " +
+        COLUMN_RECIPE_ID + " INTEGER NOT NULL, " +
+        COLUMN_SEARCH_ITEM + " TEXT, " +
+        "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + "))";
+  }
+
+
+  /**
+   * Categories
+   */
+  public static abstract class CategoryEntry implements BaseColumns {
+    public static final String TABLE_NAME = "searchItem";
+    public static final String COLUMN_RECIPE_ID = "recipe_id";
+    public static final String COLUMN_CATEGORY = "category";
+
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+        _ID + " INTEGER PRIMARY_KEY, " +
+        COLUMN_RECIPE_ID + " INTEGER NOT NULL, " +
+        COLUMN_CATEGORY + " TEXT, " +
+        "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + "))";
+  }
+
+  /**
+   * Notes
+   */
+  public static abstract class NoteEntry implements BaseColumns {
+    public static final String TABLE_NAME = "searchItem";
+    public static final String COLUMN_RECIPE_ID = "recipe_id";
+    public static final String COLUMN_NOTE = "note";
+
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+        _ID + " INTEGER PRIMARY_KEY, " +
+        COLUMN_RECIPE_ID + " INTEGER NOT NULL, " +
+        COLUMN_NOTE + " TEXT, " +
+        "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + RecipeEntry.TABLE_NAME + "(" + RecipeEntry._ID + "))";
+  }
+
+  /**
+   * Locations
+   */
   public static abstract class LocationEntry implements BaseColumns {
     public static final String TABLE_NAME = "location";
     public static final String COLUMN_ID = "location_id";
@@ -86,7 +162,5 @@ public final class CookbookContract {
         COLUMN_PHONE + " TEXT, " +
         COLUMN_STORY + " TEXT " +
         ")";
-
-    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
   }
 }

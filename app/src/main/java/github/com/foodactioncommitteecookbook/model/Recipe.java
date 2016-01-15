@@ -45,103 +45,118 @@ public class Recipe implements Serializable {
   @SerializedName("notes")
   private List<Note> notes;
 
-  public int getId () {
+  public int getId() {
     return id;
   }
 
-  public void setId (int id) {
+  public void setId(int id) {
     this.id = id;
   }
 
-  public Date getAddedDate () {
+  public Date getAddedDate() {
     return addedDate;
   }
 
-  public void setAddedDate (Date addedDate) {
+  public void setAddedDate(Date addedDate) {
     this.addedDate = addedDate;
   }
 
-  public Date getUpdatedDate () {
+  public Date getUpdatedDate() {
     return updatedDate;
   }
 
-  public void setUpdatedDate (Date updatedDate) {
+  public void setUpdatedDate(Date updatedDate) {
     this.updatedDate = updatedDate;
   }
 
-  public String getTitle () {
+  public String getTitle() {
     return title;
   }
 
-  public void setTitle (String title) {
+  public void setTitle(String title) {
     this.title = title;
   }
 
-  public List<String> getSearchItems () {
+  public List<String> getSearchItems() {
+    if (searchItems == null) {
+      searchItems = new ArrayList<>();
+    }
     return searchItems;
   }
 
-  public void addSearchItems (String searchItem) {
+  public void addSearchItems(String searchItem) {
     if (this.searchItems == null) {
       this.searchItems = new ArrayList<>();
     }
     this.searchItems.add(searchItem);
   }
 
-  public List<String> getCategories () {
+  public List<String> getCategories() {
+    if (category == null) {
+      category = new ArrayList<>();
+    }
     return category;
   }
 
-  public void addCategory (String category) {
+  public void addCategory(String category) {
     if (this.category == null) {
       this.category = new ArrayList<>();
     }
     this.category.add(category);
   }
 
-  public String getType () {
+  public String getType() {
     return type;
   }
 
-  public void setType (String type) {
+  public void setType(String type) {
     this.type = type;
   }
 
-  public String getSeason () {
+  public String getSeason() {
     return season;
   }
 
-  public void setSeason (String season) {
+  public void setSeason(String season) {
     this.season = season;
   }
 
-  public List<Ingredient> getIngredients () {
+  public List<Ingredient> getIngredients() {
+    if (ingredients == null) {
+      ingredients = new ArrayList<>();
+    }
     return ingredients;
   }
 
-  public void addIngredient (Ingredient ingredient) {
+  public void addIngredient(Ingredient ingredient) {
     if (this.ingredients == null) {
       this.ingredients = new ArrayList<>();
     }
     this.ingredients.add(ingredient);
   }
 
-  public List<Direction> getDirections () {
+  public List<Direction> getDirections() {
+    if (directions == null) {
+      directions = new ArrayList<>();
+    }
     return directions;
   }
 
-  public void addDirection (Direction direction) {
+  public void addDirection(Direction direction) {
     if (this.directions == null) {
       this.directions = new ArrayList<>();
     }
     this.directions.add(direction);
   }
 
-  public List<Note> getNotes () {
+  public List<Note> getNotes() {
+    if (notes == null) {
+      notes = new ArrayList<>();
+    }
     return notes;
   }
 
-  public void addNote (Note note) {
+  public void addNote(Note note) {
     if (this.notes == null) {
       this.notes = new ArrayList<>();
     }
@@ -155,19 +170,19 @@ public class Recipe implements Serializable {
     @SerializedName("ingredient")
     private String ingredient;
 
-    public String getAmount () {
+    public String getAmount() {
       return amount;
     }
 
-    public void setAmount (String amount) {
+    public void setAmount(String amount) {
       this.amount = amount;
     }
 
-    public String getIngredient () {
+    public String getIngredient() {
       return ingredient;
     }
 
-    public void setIngredient (String ingredient) {
+    public void setIngredient(String ingredient) {
       this.ingredient = ingredient;
     }
   }
@@ -176,11 +191,11 @@ public class Recipe implements Serializable {
     @SerializedName("direction")
     private String direction;
 
-    public String getDirection () {
+    public String getDirection() {
       return direction;
     }
 
-    public void setDirection (String direction) {
+    public void setDirection(String direction) {
       this.direction = direction;
     }
   }
@@ -189,11 +204,11 @@ public class Recipe implements Serializable {
     @SerializedName("note")
     private String note;
 
-    public String getNote () {
+    public String getNote() {
       return note;
     }
 
-    public void setNote (String note) {
+    public void setNote(String note) {
       this.note = note;
     }
   }

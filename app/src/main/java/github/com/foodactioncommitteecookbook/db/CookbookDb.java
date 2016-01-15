@@ -42,8 +42,6 @@ public class CookbookDb extends SQLiteOpenHelper {
   @Override
   public void onCreate(SQLiteDatabase db) {
     db.execSQL(CookbookContract.SQL_CREATE_ENTRIES);
-    db.execSQL(CookbookContract.LocationEntry.CREATE_TABLE);
-    db.execSQL(CookbookContract.IngredientEntry.CREATE_TABLE);
   }
 
   @Override
@@ -51,8 +49,6 @@ public class CookbookDb extends SQLiteOpenHelper {
     // This database is only a cache for online data, so its upgrade policy is
     // to simply to discard the data and start over.
     db.execSQL(CookbookContract.SQL_DELETE_ENTRIES);
-    db.execSQL(CookbookContract.LocationEntry.DROP_TABLE);
-    db.execSQL(CookbookContract.IngredientEntry.DROP_TABLE);
     onCreate(db);
   }
 
@@ -111,13 +107,23 @@ public class CookbookDb extends SQLiteOpenHelper {
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_TYPE, recipe.getType());
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_CREATED, dateFormat.format(recipe.getAddedDate()));
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_MODIFIED, dateFormat.format(recipe.getUpdatedDate()));
-      long recipeId = db.insert(CookbookContract.RecipeEntry.TABLE_NAME, "null", recipeValues);
+      long recipeId = db.insert(CookbookContract.RecipeEntry.TABLE_NAME, null, recipeValues);
 
       // Insert the search items.
-      // TODO
+      for (String searchItem : recipe.getSearchItems()) {
+        ContentValues searchValues = new ContentValues();
+        searchValues.put(CookbookContract.SearchItemEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        searchValues.put(CookbookContract.SearchItemEntry.COLUMN_SEARCH_ITEM, searchItem);
+        db.insert(CookbookContract.SearchItemEntry.TABLE_NAME, null, searchValues);
+      }
 
       // Insert the categories.
-      // TODO
+      for (String category : recipe.getCategories()) {
+        ContentValues categoryValues = new ContentValues();
+        categoryValues.put(CookbookContract.CategoryEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        categoryValues.put(CookbookContract.CategoryEntry.COLUMN_CATEGORY, category);
+        db.insert(CookbookContract.CategoryEntry.TABLE_NAME, null, categoryValues);
+      }
 
       // Insert the ingredients.
       for (Recipe.Ingredient ingredient : recipe.getIngredients()) {
@@ -125,14 +131,24 @@ public class CookbookDb extends SQLiteOpenHelper {
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_RECIPE_ID, (int) recipeId);
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_AMOUNT, ingredient.getAmount());
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_INGREDIENT, ingredient.getIngredient());
-        db.insert(CookbookContract.IngredientEntry.TABLE_NAME, "null", ingredientValues);
+        db.insert(CookbookContract.IngredientEntry.TABLE_NAME, null, ingredientValues);
       }
 
       // Insert the directions.
-      // TODO
+      for (Recipe.Direction direction : recipe.getDirections()) {
+        ContentValues directionValues = new ContentValues();
+        directionValues.put(CookbookContract.DirectionEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        directionValues.put(CookbookContract.DirectionEntry.COLUMN_DIRECTION, direction.getDirection());
+        db.insert(CookbookContract.DirectionEntry.TABLE_NAME, null, directionValues);
+      }
 
       // Insert the notes.
-      // TODO
+      for (Recipe.Note note : recipe.getNotes()) {
+        ContentValues noteValues = new ContentValues();
+        noteValues.put(CookbookContract.NoteEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        noteValues.put(CookbookContract.NoteEntry.COLUMN_NOTE, note.getNote());
+        db.insert(CookbookContract.NoteEntry.TABLE_NAME, null, noteValues);
+      }
 
       db.setTransactionSuccessful();
     } finally {
