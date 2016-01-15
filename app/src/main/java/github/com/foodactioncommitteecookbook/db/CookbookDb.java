@@ -41,14 +41,26 @@ public class CookbookDb extends SQLiteOpenHelper {
 
   @Override
   public void onCreate(SQLiteDatabase db) {
-    db.execSQL(CookbookContract.SQL_CREATE_ENTRIES);
+    db.execSQL(CookbookContract.RecipeEntry.CREATE_TABLE);
+    db.execSQL(CookbookContract.IngredientEntry.CREATE_TABLE);
+    db.execSQL(CookbookContract.DirectionEntry.CREATE_TABLE);
+    db.execSQL(CookbookContract.CategoryEntry.CREATE_TABLE);
+    db.execSQL(CookbookContract.SearchItemEntry.CREATE_TABLE);
+    db.execSQL(CookbookContract.NoteEntry.CREATE_TABLE);
+    db.execSQL(CookbookContract.LocationEntry.CREATE_TABLE);
   }
 
   @Override
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     // This database is only a cache for online data, so its upgrade policy is
     // to simply to discard the data and start over.
-    db.execSQL(CookbookContract.SQL_DELETE_ENTRIES);
+    db.execSQL(CookbookContract.RecipeEntry.DELETE_TABLE);
+    db.execSQL(CookbookContract.IngredientEntry.DELETE_TABLE);
+    db.execSQL(CookbookContract.DirectionEntry.DELETE_TABLE);
+    db.execSQL(CookbookContract.CategoryEntry.DELETE_TABLE);
+    db.execSQL(CookbookContract.SearchItemEntry.DELETE_TABLE);
+    db.execSQL(CookbookContract.NoteEntry.DELETE_TABLE);
+    db.execSQL(CookbookContract.LocationEntry.DELETE_TABLE);
     onCreate(db);
   }
 
@@ -107,12 +119,12 @@ public class CookbookDb extends SQLiteOpenHelper {
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_TYPE, recipe.getType());
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_CREATED, dateFormat.format(recipe.getAddedDate()));
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_MODIFIED, dateFormat.format(recipe.getUpdatedDate()));
-      long recipeId = db.insert(CookbookContract.RecipeEntry.TABLE_NAME, null, recipeValues);
+      db.insert(CookbookContract.RecipeEntry.TABLE_NAME, null, recipeValues);
 
       // Insert the search items.
       for (String searchItem : recipe.getSearchItems()) {
         ContentValues searchValues = new ContentValues();
-        searchValues.put(CookbookContract.SearchItemEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        searchValues.put(CookbookContract.SearchItemEntry.COLUMN_RECIPE_ID, recipe.getId());
         searchValues.put(CookbookContract.SearchItemEntry.COLUMN_SEARCH_ITEM, searchItem);
         db.insert(CookbookContract.SearchItemEntry.TABLE_NAME, null, searchValues);
       }
@@ -120,7 +132,7 @@ public class CookbookDb extends SQLiteOpenHelper {
       // Insert the categories.
       for (String category : recipe.getCategories()) {
         ContentValues categoryValues = new ContentValues();
-        categoryValues.put(CookbookContract.CategoryEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        categoryValues.put(CookbookContract.CategoryEntry.COLUMN_RECIPE_ID, recipe.getId());
         categoryValues.put(CookbookContract.CategoryEntry.COLUMN_CATEGORY, category);
         db.insert(CookbookContract.CategoryEntry.TABLE_NAME, null, categoryValues);
       }
@@ -128,7 +140,7 @@ public class CookbookDb extends SQLiteOpenHelper {
       // Insert the ingredients.
       for (Recipe.Ingredient ingredient : recipe.getIngredients()) {
         ContentValues ingredientValues = new ContentValues();
-        ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_RECIPE_ID, recipe.getId());
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_AMOUNT, ingredient.getAmount());
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_INGREDIENT, ingredient.getIngredient());
         db.insert(CookbookContract.IngredientEntry.TABLE_NAME, null, ingredientValues);
@@ -137,7 +149,7 @@ public class CookbookDb extends SQLiteOpenHelper {
       // Insert the directions.
       for (Recipe.Direction direction : recipe.getDirections()) {
         ContentValues directionValues = new ContentValues();
-        directionValues.put(CookbookContract.DirectionEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        directionValues.put(CookbookContract.DirectionEntry.COLUMN_RECIPE_ID, recipe.getId());
         directionValues.put(CookbookContract.DirectionEntry.COLUMN_DIRECTION, direction.getDirection());
         db.insert(CookbookContract.DirectionEntry.TABLE_NAME, null, directionValues);
       }
@@ -145,7 +157,7 @@ public class CookbookDb extends SQLiteOpenHelper {
       // Insert the notes.
       for (Recipe.Note note : recipe.getNotes()) {
         ContentValues noteValues = new ContentValues();
-        noteValues.put(CookbookContract.NoteEntry.COLUMN_RECIPE_ID, (int) recipeId);
+        noteValues.put(CookbookContract.NoteEntry.COLUMN_RECIPE_ID, recipe.getId());
         noteValues.put(CookbookContract.NoteEntry.COLUMN_NOTE, note.getNote());
         db.insert(CookbookContract.NoteEntry.TABLE_NAME, null, noteValues);
       }
@@ -159,33 +171,91 @@ public class CookbookDb extends SQLiteOpenHelper {
   public Recipe getRecipe(int recipeId) {
     SQLiteDatabase db = getWritableDatabase();
 
+    String[] args = new String[]{String.valueOf(recipeId)};
+
+    Cursor cursor = null;
+    Recipe recipe;
+
     try {
-      Cursor cursor = db.query(
-          CookbookContract.RecipeEntry.TABLE_NAME,
-          null,
-          CookbookContract.RecipeEntry.COLUMN_ID + " = ?",
-          new String[]{String.valueOf(recipeId)},
-          null,
-          null,
-          null
-      );
+      String query = "SELECT * FROM " + CookbookContract.RecipeEntry.TABLE_NAME +
+          " WHERE " + CookbookContract.RecipeEntry.COLUMN_ID + " = ?";
+
+      cursor = db.rawQuery(query, args);
 
       if (cursor.moveToFirst()) {
-        Recipe recipe = new Recipe();
+        recipe = new Recipe();
         recipe.setId(cursor.getInt(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_ID)));
         recipe.setTitle(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_TITLE)));
         recipe.setType(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_TYPE)));
         recipe.setSeason(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_SEASON)));
         recipe.setAddedDate(dateFormat.parse(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_CREATED))));
         recipe.setUpdatedDate(dateFormat.parse(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_MODIFIED))));
-
-        return recipe;
+      } else {
+        return null;
       }
-    } catch (Exception e) {
-      return null;
-    }
 
-    return null;
+      cursor.close();
+
+      query = "SELECT * FROM " + CookbookContract.IngredientEntry.TABLE_NAME +
+          " WHERE " + CookbookContract.IngredientEntry.COLUMN_RECIPE_ID + " = ?";
+      cursor = db.rawQuery(query, args);
+
+      while (cursor.moveToNext()) {
+        Recipe.Ingredient ingredient = new Recipe.Ingredient();
+        ingredient.setAmount(cursor.getString(cursor.getColumnIndex(CookbookContract.IngredientEntry.COLUMN_AMOUNT)));
+        ingredient.setIngredient(cursor.getString(cursor.getColumnIndex(CookbookContract.IngredientEntry.COLUMN_INGREDIENT)));
+        recipe.addIngredient(ingredient);
+      }
+
+      cursor.close();
+      query = "SELECT * FROM " + CookbookContract.DirectionEntry.TABLE_NAME +
+          " WHERE " + CookbookContract.DirectionEntry.COLUMN_RECIPE_ID + " = ?";
+      cursor = db.rawQuery(query, args);
+
+      while (cursor.moveToNext()) {
+        Recipe.Direction direction = new Recipe.Direction();
+        direction.setDirection(cursor.getString(cursor.getColumnIndex(CookbookContract.DirectionEntry.COLUMN_DIRECTION)));
+        recipe.addDirection(direction);
+      }
+
+      cursor.close();
+      query = "SELECT * FROM " + CookbookContract.CategoryEntry.TABLE_NAME +
+          " WHERE " + CookbookContract.CategoryEntry.COLUMN_RECIPE_ID + " = ?";
+      cursor = db.rawQuery(query, args);
+
+      while (cursor.moveToNext()) {
+        recipe.addCategory(cursor.getString(cursor.getColumnIndex(CookbookContract.CategoryEntry.COLUMN_CATEGORY)));
+      }
+
+      cursor.close();
+      query = "SELECT * FROM " + CookbookContract.NoteEntry.TABLE_NAME +
+          " WHERE " + CookbookContract.NoteEntry.COLUMN_RECIPE_ID + " = ?";
+      cursor = db.rawQuery(query, args);
+
+      while (cursor.moveToNext()) {
+        Recipe.Note note = new Recipe.Note();
+        note.setNote(cursor.getString(cursor.getColumnIndex(CookbookContract.NoteEntry.COLUMN_NOTE)));
+        recipe.addNote(note);
+      }
+
+      cursor.close();
+      query = "SELECT * FROM " + CookbookContract.SearchItemEntry.TABLE_NAME +
+          " WHERE " + CookbookContract.SearchItemEntry.COLUMN_RECIPE_ID + " = ?";
+      cursor = db.rawQuery(query, args);
+
+      while (cursor.moveToNext()) {
+        recipe.addSearchItems(cursor.getString(cursor.getColumnIndex(CookbookContract.SearchItemEntry.COLUMN_SEARCH_ITEM)));
+      }
+
+      return recipe;
+    } catch (Exception e) {
+      Timber.e(e, "Unable to retrieve recipe %d", recipeId);
+      return null;
+    } finally {
+      if (cursor != null) {
+        cursor.close();
+      }
+    }
   }
 
   public Cursor searchForRecipes(final String query) {
