@@ -3,17 +3,21 @@ package github.com.foodactioncommitteecookbook.title;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import github.com.foodactioncommitteecookbook.CookbookApplication;
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
 import github.com.foodactioncommitteecookbook.main.MainActivity;
-import github.com.foodactioncommitteecookbook.network.FeaturedRecipeRequest;
-import github.com.foodactioncommitteecookbook.network.RecipeRequest;
-import github.com.foodactioncommitteecookbook.network.RequestHelper;
+import github.com.foodactioncommitteecookbook.model.Recipe;
+import github.com.foodactioncommitteecookbook.model.RecipeList;
+import github.com.foodactioncommitteecookbook.network.RecipeService;
+import retrofit2.Call;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -22,10 +26,12 @@ import timber.log.Timber;
  */
 public class TitleActivity extends Activity {
 
+  Observable<List<Recipe>> recipes;
+  Call<List<Integer>> featured;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    EventBus.getDefault().registerSticky(this);
 
     if (isFinishing()) {
       return;
@@ -36,81 +42,50 @@ public class TitleActivity extends Activity {
 
     // If the DB is empty then fetch the entire contents from the server. Otherwise, fetch
     // a delta of changes.
-    if (lastModified == null) {
-      fetchAllRecipes();
-    } else {
-      Timber.v("Last modified date is %s", lastModified.toString());
-      fetchRecipesSince(lastModified);
-    }
+    Observable<RecipeList> recipes = fetchRecipes(lastModified);
+    Observable<List<Integer>> featured = fetchFeaturedRecipes();
 
-    fetchFeaturedRecipe();
+    Observable.zip(recipes, featured, (recipesList, integers) -> {
+      CookbookDb.instance().insertAll(recipesList.getRecipes());
+      return integers;
+    }).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .unsubscribeOn(Schedulers.io())
+        .subscribe(this::gotoMain);
   }
 
-  @Override
-  protected void onDestroy() {
+  @Override protected void onDestroy() {
     super.onDestroy();
-    EventBus.getDefault().unregister(this);
+
   }
 
-  private void fetchAllRecipes() {
-    Timber.v("Fetching all recipes");
-    RecipeRequest request = new RecipeRequest();
-    RequestHelper.instance().send(request);
+  private Observable<RecipeList> fetchRecipes(final Date date) {
+    if (date == null) {
+      Timber.v("Fetching all recipes");
+      return getRecipeService().recipes();
+    } else {
+      Timber.v("Fetching new recipes from %s", date.toString());
+      return getRecipeService().recipes(date.toString());
+    }
   }
 
-  private void fetchRecipesSince(final Date date) {
-    Timber.v("Fetching new recipes");
-    // TODO fetch updated recipes.
-    new Handler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        gotoMain();
-      }
-    }, 2000);
-  }
-
-  private void fetchFeaturedRecipe() {
+  private Observable<List<Integer>> fetchFeaturedRecipes() {
     Timber.v("Fetching featured recipe");
-    FeaturedRecipeRequest request = new FeaturedRecipeRequest();
-    RequestHelper.instance().send(request);
+    return getRecipeService().featured();
   }
 
+  private void gotoMain(List<Integer> featuredRecipes) {
+    ArrayList<Integer> arrayList = new ArrayList<>(featuredRecipes.size());
+    arrayList.addAll(featuredRecipes);
 
-  @SuppressWarnings("unused")
-  public void onEvent(RecipeRequest.CompleteEvent event) {
-    CookbookDb.instance().insertAll(event.getRecipes());
-
-    Timber.d("Imported recipes. Launching main activity");
-    gotoMain();
-  }
-
-  @SuppressWarnings("unused")
-  public void onEvent(FeaturedRecipeRequest.CompleteEvent event) {
-    Timber.v("Got featured recipe");
-    gotoMain();
-  }
-
-
-  @SuppressWarnings("unused")
-  public void onEvent(RecipeRequest.ErrorEvent event) {
-    //noinspection ThrowableResultOfMethodCallIgnored
-    Timber.e(event.getVolleyError().toString());
-    Toast.makeText(this, "Unable to fetch recipes", Toast.LENGTH_LONG).show();
-    gotoMain();
-  }
-
-  @SuppressWarnings("unused")
-  public void onEvent(FeaturedRecipeRequest.ErrorEvent event) {
-    //noinspection ThrowableResultOfMethodCallIgnored
-    Timber.e(event.getVolleyError().toString());
-    Toast.makeText(this, "Unable to fetch featured recipe", Toast.LENGTH_LONG).show();
-    gotoMain();
-  }
-
-  private void gotoMain() {
     Intent intent = new Intent(this, MainActivity.class);
+    intent.putIntegerArrayListExtra(MainActivity.FEATURED_RECIPE_ID, arrayList);
     startActivity(intent);
     finish();
   }
 
+  private RecipeService getRecipeService() {
+    CookbookApplication application = (CookbookApplication) getApplicationContext();
+    return application.getService();
+  }
 }

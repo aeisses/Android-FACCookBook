@@ -12,11 +12,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.android.volley.toolbox.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
 import github.com.foodactioncommitteecookbook.model.Recipe;
-import github.com.foodactioncommitteecookbook.network.RequestHelper;
 import github.com.foodactioncommitteecookbook.recipe.RecipeActivity;
 import timber.log.Timber;
 
@@ -145,9 +144,12 @@ public class RecipeView extends ImageView {
 
     recipe = newRecipe;
 
-    RequestHelper.imageLoader().get(
-        "https://dl.dropboxusercontent.com/u/10173737/Cookbook/Images/Medium/" + Integer.toString(recipe.getId()) + "-Standard-Tablet-Medium.png",
-        ImageLoader.getImageListener(this, R.drawable.default_recipe_image, R.drawable.error_recipe_image));
+    String url = "https://dl.dropboxusercontent.com/u/10173737/Cookbook/Images/Medium/" + Integer.toString(recipe.getId()) + "-Standard-Tablet-Medium.png";
+    Picasso.with(getContext())
+        .load(url)
+        .placeholder(R.drawable.default_recipe_image)
+        .error(R.drawable.error_recipe_image)
+        .into(this);
 
     onSizeChanged(getWidth(), getHeight(), 0, 0);
   }

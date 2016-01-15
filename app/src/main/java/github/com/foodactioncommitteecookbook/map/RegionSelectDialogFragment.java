@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * Region Selection dialog fragment that is shown on the Map activity.
@@ -26,7 +25,8 @@ public class RegionSelectDialogFragment extends DialogFragment {
     builder.setSingleChoiceItems(getRegionAdapter(), 0, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int which) {
-        EventBus.getDefault().post(new RegionSelectedEvent(Region.values()[which]));
+        // TODO : Use RxJava
+        //EventBus.getDefault().post(new RegionSelectedEvent(Region.values()[which]));
         dismiss();
       }
     });

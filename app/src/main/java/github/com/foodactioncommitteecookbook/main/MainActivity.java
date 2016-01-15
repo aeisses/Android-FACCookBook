@@ -18,7 +18,7 @@ import github.com.foodactioncommitteecookbook.model.Recipe;
  */
 public class MainActivity extends BaseActivity implements MainView {
 
-  final static String FEATURED_RECIPE_ID = "featured_recipe_id";
+  public final static String FEATURED_RECIPE_ID = "featured_recipe_id";
 
   int featuredRecipeId;
 

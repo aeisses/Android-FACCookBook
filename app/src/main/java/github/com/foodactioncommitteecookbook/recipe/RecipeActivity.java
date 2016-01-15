@@ -7,14 +7,13 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import github.com.foodactioncommitteecookbook.BaseActivity;
 import github.com.foodactioncommitteecookbook.R;
 import github.com.foodactioncommitteecookbook.model.Recipe;
-import github.com.foodactioncommitteecookbook.network.RequestHelper;
 import timber.log.Timber;
 
 /**
@@ -22,7 +21,7 @@ import timber.log.Timber;
  */
 public class RecipeActivity extends BaseActivity {
 
-  final static String INTENT_RECIPE = "recipe";
+  public final static String INTENT_RECIPE = "recipe";
 
   Recipe recipe;
   @Bind(R.id.recipe_title) TextView titleView;
@@ -46,8 +45,11 @@ public class RecipeActivity extends BaseActivity {
     titleView.setTextSize(24);
     titleView.setText(recipe.getTitle());
 
-    RequestHelper.imageLoader().get(
-        "https://dl.dropboxusercontent.com/u/10173737/Cookbook/Images/Medium/" + Integer.toString(recipe.getId()) + "-Standard-Tablet-Medium.png",
-        ImageLoader.getImageListener(imageView, R.drawable.default_recipe_image, R.drawable.error_recipe_image));
+    String url = "https://dl.dropboxusercontent.com/u/10173737/Cookbook/Images/Medium/" + Integer.toString(recipe.getId()) + "-Standard-Tablet-Medium.png";
+    Picasso.with(this)
+        .load(url)
+        .placeholder(R.drawable.default_recipe_image)
+        .error(R.drawable.error_recipe_image)
+        .into(imageView);
   }
 }
