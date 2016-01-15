@@ -163,7 +163,7 @@ public class Recipe implements Serializable {
     this.notes.add(note);
   }
 
-  public static class Ingredient {
+  public static class Ingredient implements Serializable {
     @SerializedName("amount")
     private String amount;
 
@@ -187,7 +187,7 @@ public class Recipe implements Serializable {
     }
   }
 
-  public static class Direction {
+  public static class Direction implements Serializable {
     @SerializedName("direction")
     private String direction;
 
@@ -200,7 +200,7 @@ public class Recipe implements Serializable {
     }
   }
 
-  public static class Note {
+  public static class Note implements Serializable {
     @SerializedName("note")
     private String note;
 
