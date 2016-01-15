@@ -10,25 +10,25 @@
               android:paddingTop="@dimen/activity_vertical_margin"
               tools:context=".main.MainActivity">
 
-  <github.com.foodactioncommitteecookbook.RecipeView
-    android:id="@+id/main_activity_featured_recipe"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:contentDescription="@string/featured_recipe_description"/>
+    <ImageView
+        android:id="@+id/main_activity_featured_recipe"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/featured_recipe_description"/>
 
-  <github.com.foodactioncommitteecookbook.RecipeGrid
-    android:id="@+id/main_activity_recipe_grid"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:clickable="true"
-    android:columnWidth="100dp"
-    android:drawSelectorOnTop="true"
-    android:focusable="true"
-    android:gravity="center"
-    android:numColumns="2"
-    android:stretchMode="columnWidth"
-    android:verticalSpacing="5dp"
-    app:sorted_by="1"/>
+    <github.com.foodactioncommitteecookbook.RecipeGrid
+        android:id="@+id/main_activity_recipe_grid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:clickable="true"
+        android:columnWidth="100dp"
+        android:drawSelectorOnTop="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp"
+        app:sorted_by="1"/>
 
 </LinearLayout>

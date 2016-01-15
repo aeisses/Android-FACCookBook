@@ -13,7 +13,7 @@ import github.com.foodactioncommitteecookbook.db.CookbookDb;
 import github.com.foodactioncommitteecookbook.main.MainActivity;
 import github.com.foodactioncommitteecookbook.model.Recipe;
 import github.com.foodactioncommitteecookbook.model.RecipeList;
-import github.com.foodactioncommitteecookbook.network.RecipeService;
+import github.com.foodactioncommitteecookbook.network.CookbookService;
 import retrofit2.Call;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -62,16 +62,16 @@ public class TitleActivity extends Activity {
   private Observable<RecipeList> fetchRecipes(final Date date) {
     if (date == null) {
       Timber.v("Fetching all recipes");
-      return getRecipeService().recipes();
+      return getCookbookService().recipes();
     } else {
       Timber.v("Fetching new recipes from %s", date.toString());
-      return getRecipeService().recipes(date.toString());
+      return getCookbookService().recipes(date.toString());
     }
   }
 
   private Observable<List<Integer>> fetchFeaturedRecipes() {
     Timber.v("Fetching featured recipe");
-    return getRecipeService().featured();
+    return getCookbookService().featured();
   }
 
   private void gotoMain(List<Integer> featuredRecipes) {
@@ -84,7 +84,7 @@ public class TitleActivity extends Activity {
     finish();
   }
 
-  private RecipeService getRecipeService() {
+  private CookbookService getCookbookService() {
     CookbookApplication application = (CookbookApplication) getApplicationContext();
     return application.getService();
   }

@@ -1,11 +1,14 @@
 package github.com.foodactioncommitteecookbook.main;
 
+import java.util.List;
+
+import github.com.foodactioncommitteecookbook.AbstractView;
 import github.com.foodactioncommitteecookbook.model.Recipe;
 
 /**
  *
  */
-interface MainView {
+interface MainView extends AbstractView {
 
-  void addRecipe(Recipe recipe);
+  void setRecipes(List<Recipe> recipes);
 }

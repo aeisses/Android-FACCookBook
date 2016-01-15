@@ -11,7 +11,7 @@ import rx.Observable;
 /**
  *
  */
-public interface RecipeService {
+public interface CookbookService {
   @GET("u/19713116/foundation/recipies.json") Observable<RecipeList> recipes();
 
   @GET("u/19713116/foundation/update.json")

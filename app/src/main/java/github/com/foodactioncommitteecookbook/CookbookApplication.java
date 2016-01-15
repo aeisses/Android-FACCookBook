@@ -4,7 +4,7 @@ import android.app.Application;
 
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
 import github.com.foodactioncommitteecookbook.map.FindLocationTask;
-import github.com.foodactioncommitteecookbook.network.RecipeService;
+import github.com.foodactioncommitteecookbook.network.CookbookService;
 import github.com.foodactioncommitteecookbook.network.ServiceFactory;
 import timber.log.Timber;
 
@@ -13,9 +13,9 @@ import timber.log.Timber;
  */
 public class CookbookApplication extends Application {
 
-  private RecipeService service;
+  private CookbookService service;
 
-  public RecipeService getService() {
+  public CookbookService getService() {
     return service;
   }
 
@@ -28,7 +28,7 @@ public class CookbookApplication extends Application {
     }
 
     // Create the HTTP service for querying the server.
-    service = ServiceFactory.createService(RecipeService.class);
+    service = ServiceFactory.createService(CookbookService.class);
 
     // Create our singleton DB helper instance.
     CookbookDb.create(getApplicationContext());

@@ -143,10 +143,6 @@ public class CookbookDb extends SQLiteOpenHelper {
   public Recipe getRecipe(int recipeId) {
     SQLiteDatabase db = getWritableDatabase();
 
-    String[] projection = {
-        CookbookContract.RecipeEntry.COLUMN_MODIFIED
-    };
-
     try {
       Cursor cursor = db.query(
           CookbookContract.RecipeEntry.TABLE_NAME,
@@ -166,7 +162,6 @@ public class CookbookDb extends SQLiteOpenHelper {
         recipe.setSeason(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_SEASON)));
         recipe.setAddedDate(dateFormat.parse(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_CREATED))));
         recipe.setUpdatedDate(dateFormat.parse(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_MODIFIED))));
-//        recipeValues.put(CookbookContract.RecipeEntry.COLUMN_FAVOURITE, false);
 
         return recipe;
       }
