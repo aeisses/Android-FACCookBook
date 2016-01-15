@@ -1,4 +1,4 @@
-package github.com.foodactioncommitteecookbook;
+package github.com.foodactioncommitteecookbook.list;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,8 @@ import android.support.v4.view.ViewPager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import github.com.foodactioncommitteecookbook.BaseActivity;
+import github.com.foodactioncommitteecookbook.R;
 
 /**
  * Contains a list of recipes that can be selected.

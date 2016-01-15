@@ -1,4 +1,4 @@
-package github.com.foodactioncommitteecookbook;
+package github.com.foodactioncommitteecookbook.main;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -6,12 +6,17 @@ import android.support.annotation.Nullable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import github.com.foodactioncommitteecookbook.BaseActivity;
+import github.com.foodactioncommitteecookbook.R;
+import github.com.foodactioncommitteecookbook.RecipeGrid;
+import github.com.foodactioncommitteecookbook.RecipeView;
+import github.com.foodactioncommitteecookbook.model.Recipe;
 
 
 /**
  * The main screen in the application.
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements MainView {
 
   final static String FEATURED_RECIPE_ID = "featured_recipe_id";
 
@@ -38,5 +43,9 @@ public class MainActivity extends BaseActivity {
     editor.commit();
 
     featuredRecipe.setRecipeId(featuredRecipeId);
+  }
+
+  @Override public void addRecipe(Recipe recipe) {
+
   }
 }

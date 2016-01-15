@@ -11,21 +11,21 @@ import timber.log.Timber;
  * Application override for creating singletons.
  */
 public class CookbookApplication extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
+  @Override
+  public void onCreate() {
+    super.onCreate();
 
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
-
-        // Create our singleton DB helper instance.
-        CookbookDb.create(getApplicationContext());
-
-        // Create the single Volley helper.
-        RequestHelper.create(getApplicationContext());
-
-        // Search for the user's location
-        new FindLocationTask().execute(this);
+    if (BuildConfig.DEBUG) {
+      Timber.plant(new Timber.DebugTree());
     }
+
+    // Create our singleton DB helper instance.
+    CookbookDb.create(getApplicationContext());
+
+    // Create the single Volley helper.
+    RequestHelper.create(getApplicationContext());
+
+    // Search for the user's location
+    new FindLocationTask().execute(this);
+  }
 }

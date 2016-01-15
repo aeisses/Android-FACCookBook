@@ -1,4 +1,4 @@
-package github.com.foodactioncommitteecookbook;
+package github.com.foodactioncommitteecookbook.search;
 
 import android.app.SearchManager;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.widget.SimpleCursorAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import github.com.foodactioncommitteecookbook.BaseActivity;
+import github.com.foodactioncommitteecookbook.R;
 import github.com.foodactioncommitteecookbook.db.CookbookContract;
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
 import timber.log.Timber;

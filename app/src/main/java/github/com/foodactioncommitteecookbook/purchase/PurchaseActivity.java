@@ -1,6 +1,9 @@
-package github.com.foodactioncommitteecookbook;
+package github.com.foodactioncommitteecookbook.purchase;
 
 import android.os.Bundle;
+
+import github.com.foodactioncommitteecookbook.BaseActivity;
+import github.com.foodactioncommitteecookbook.R;
 
 /**
  * Shows recipes available for purchase.

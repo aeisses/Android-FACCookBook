@@ -1,4 +1,4 @@
-package github.com.foodactioncommitteecookbook;
+package github.com.foodactioncommitteecookbook.title;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import java.util.Date;
 
 import de.greenrobot.event.EventBus;
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
+import github.com.foodactioncommitteecookbook.main.MainActivity;
 import github.com.foodactioncommitteecookbook.network.FeaturedRecipeRequest;
 import github.com.foodactioncommitteecookbook.network.RecipeRequest;
 import github.com.foodactioncommitteecookbook.network.RequestHelper;
@@ -20,10 +21,6 @@ import timber.log.Timber;
  * When the data sync is complete it moves on to the MainActivity.
  */
 public class TitleActivity extends Activity {
-
-  private boolean updatedRecipes;
-  private boolean updatedFeaturedRecipe;
-  private int featuredRecipe;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +64,6 @@ public class TitleActivity extends Activity {
     new Handler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        updatedRecipes = true;
         gotoMain();
       }
     }, 2000);
@@ -85,15 +81,12 @@ public class TitleActivity extends Activity {
     CookbookDb.instance().insertAll(event.getRecipes());
 
     Timber.d("Imported recipes. Launching main activity");
-    updatedRecipes = true;
     gotoMain();
   }
 
   @SuppressWarnings("unused")
   public void onEvent(FeaturedRecipeRequest.CompleteEvent event) {
     Timber.v("Got featured recipe");
-    updatedFeaturedRecipe = true;
-    featuredRecipe = event.getFeaturedId();
     gotoMain();
   }
 

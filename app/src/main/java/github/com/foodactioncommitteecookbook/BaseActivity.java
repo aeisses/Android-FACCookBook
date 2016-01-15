@@ -9,6 +9,9 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import github.com.foodactioncommitteecookbook.list.ListActivity;
+import github.com.foodactioncommitteecookbook.search.SearchActivity;
+
 /**
  * Abstract base class containing logic common between activities.
  */

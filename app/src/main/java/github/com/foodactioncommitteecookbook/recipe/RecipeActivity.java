@@ -1,4 +1,4 @@
-package github.com.foodactioncommitteecookbook;
+package github.com.foodactioncommitteecookbook.recipe;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -11,6 +11,8 @@ import com.android.volley.toolbox.ImageLoader;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import github.com.foodactioncommitteecookbook.BaseActivity;
+import github.com.foodactioncommitteecookbook.R;
 import github.com.foodactioncommitteecookbook.model.Recipe;
 import github.com.foodactioncommitteecookbook.network.RequestHelper;
 import timber.log.Timber;
