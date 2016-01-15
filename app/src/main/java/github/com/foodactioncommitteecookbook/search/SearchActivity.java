@@ -47,7 +47,7 @@ public class SearchActivity extends BaseActivity {
       };
 
       int[] toViews = {
-          R.id.main_activity_recipe_grid
+          //R.id.main_activity_recipe_grid
       };
 
       SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.recipe_item_layout, cursor, columns, toViews, 0);

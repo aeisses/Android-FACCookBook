@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="title_background">#cdded6</color>
-  <color name="recipe_name_background">#d0ffffff</color>
-  <color name="recipe_name_text_color">#ff202020</color>
+    <color name="title_background">#cdded6</color>
+    <color name="recipe_name_background">#88000000</color>
+    <color name="recipe_name_text_color">#ffffff</color>
 </resources>

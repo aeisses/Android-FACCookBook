@@ -1,15 +1,13 @@
 package github.com.foodactioncommitteecookbook.main;
 
-import github.com.foodactioncommitteecookbook.model.Recipe;
+import github.com.foodactioncommitteecookbook.RecipeAdapter;
 
 /**
  *
  */
-public interface MainPresenter {
+public interface MainPresenter extends RecipeAdapter.SelectionListener {
 
   void onCreate();
 
   void onDestroy();
-
-  void onRecipeSelected(Recipe recipe);
 }
