@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import github.com.foodactioncommitteecookbook.CookbookApplication;
+import github.com.foodactioncommitteecookbook.MainActivity;
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
-import github.com.foodactioncommitteecookbook.main.MainActivity;
 import github.com.foodactioncommitteecookbook.model.Recipe;
 import github.com.foodactioncommitteecookbook.model.RecipeList;
 import github.com.foodactioncommitteecookbook.network.CookbookService;
@@ -75,11 +74,10 @@ public class TitleActivity extends Activity {
   }
 
   private void gotoMain(List<Integer> featuredRecipes) {
-    ArrayList<Integer> arrayList = new ArrayList<>(featuredRecipes.size());
-    arrayList.addAll(featuredRecipes);
+    CookbookApplication application = (CookbookApplication) getApplicationContext();
+    application.setFeaturedIds(featuredRecipes);
 
     Intent intent = new Intent(this, MainActivity.class);
-    intent.putIntegerArrayListExtra(MainActivity.FEATURED_RECIPE_ID, arrayList);
     startActivity(intent);
     finish();
   }

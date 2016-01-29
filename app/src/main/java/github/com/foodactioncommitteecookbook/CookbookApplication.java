@@ -2,6 +2,8 @@ package github.com.foodactioncommitteecookbook;
 
 import android.app.Application;
 
+import java.util.List;
+
 import github.com.foodactioncommitteecookbook.db.CookbookDb;
 import github.com.foodactioncommitteecookbook.map.FindLocationTask;
 import github.com.foodactioncommitteecookbook.network.CookbookService;
@@ -14,9 +16,18 @@ import timber.log.Timber;
 public class CookbookApplication extends Application {
 
   private CookbookService service;
+  private List<Integer> featuredIds;
 
   public CookbookService getService() {
     return service;
+  }
+
+  public List<Integer> getFeaturedIds() {
+    return featuredIds;
+  }
+
+  public void setFeaturedIds(List<Integer> featuredIds) {
+    this.featuredIds = featuredIds;
   }
 
   @Override

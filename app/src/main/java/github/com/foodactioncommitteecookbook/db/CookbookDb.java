@@ -119,14 +119,14 @@ public class CookbookDb extends SQLiteOpenHelper {
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_TYPE, recipe.getType());
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_CREATED, dateFormat.format(recipe.getAddedDate()));
       recipeValues.put(CookbookContract.RecipeEntry.COLUMN_MODIFIED, dateFormat.format(recipe.getUpdatedDate()));
-      db.insert(CookbookContract.RecipeEntry.TABLE_NAME, null, recipeValues);
+      db.insertWithOnConflict(CookbookContract.RecipeEntry.TABLE_NAME, null, recipeValues, SQLiteDatabase.CONFLICT_REPLACE);
 
       // Insert the search items.
       for (String searchItem : recipe.getSearchItems()) {
         ContentValues searchValues = new ContentValues();
         searchValues.put(CookbookContract.SearchItemEntry.COLUMN_RECIPE_ID, recipe.getId());
         searchValues.put(CookbookContract.SearchItemEntry.COLUMN_SEARCH_ITEM, searchItem);
-        db.insert(CookbookContract.SearchItemEntry.TABLE_NAME, null, searchValues);
+        db.insertWithOnConflict(CookbookContract.SearchItemEntry.TABLE_NAME, null, searchValues, SQLiteDatabase.CONFLICT_REPLACE);
       }
 
       // Insert the categories.
@@ -134,7 +134,7 @@ public class CookbookDb extends SQLiteOpenHelper {
         ContentValues categoryValues = new ContentValues();
         categoryValues.put(CookbookContract.CategoryEntry.COLUMN_RECIPE_ID, recipe.getId());
         categoryValues.put(CookbookContract.CategoryEntry.COLUMN_CATEGORY, category);
-        db.insert(CookbookContract.CategoryEntry.TABLE_NAME, null, categoryValues);
+        db.insertWithOnConflict(CookbookContract.CategoryEntry.TABLE_NAME, null, categoryValues, SQLiteDatabase.CONFLICT_REPLACE);
       }
 
       // Insert the ingredients.
@@ -143,7 +143,7 @@ public class CookbookDb extends SQLiteOpenHelper {
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_RECIPE_ID, recipe.getId());
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_AMOUNT, ingredient.getAmount());
         ingredientValues.put(CookbookContract.IngredientEntry.COLUMN_INGREDIENT, ingredient.getIngredient());
-        db.insert(CookbookContract.IngredientEntry.TABLE_NAME, null, ingredientValues);
+        db.insertWithOnConflict(CookbookContract.IngredientEntry.TABLE_NAME, null, ingredientValues, SQLiteDatabase.CONFLICT_REPLACE);
       }
 
       // Insert the directions.
@@ -151,7 +151,7 @@ public class CookbookDb extends SQLiteOpenHelper {
         ContentValues directionValues = new ContentValues();
         directionValues.put(CookbookContract.DirectionEntry.COLUMN_RECIPE_ID, recipe.getId());
         directionValues.put(CookbookContract.DirectionEntry.COLUMN_DIRECTION, direction.getDirection());
-        db.insert(CookbookContract.DirectionEntry.TABLE_NAME, null, directionValues);
+        db.insertWithOnConflict(CookbookContract.DirectionEntry.TABLE_NAME, null, directionValues, SQLiteDatabase.CONFLICT_REPLACE);
       }
 
       // Insert the notes.
@@ -159,7 +159,7 @@ public class CookbookDb extends SQLiteOpenHelper {
         ContentValues noteValues = new ContentValues();
         noteValues.put(CookbookContract.NoteEntry.COLUMN_RECIPE_ID, recipe.getId());
         noteValues.put(CookbookContract.NoteEntry.COLUMN_NOTE, note.getNote());
-        db.insert(CookbookContract.NoteEntry.TABLE_NAME, null, noteValues);
+        db.insertWithOnConflict(CookbookContract.NoteEntry.TABLE_NAME, null, noteValues, SQLiteDatabase.CONFLICT_REPLACE);
       }
 
       db.setTransactionSuccessful();

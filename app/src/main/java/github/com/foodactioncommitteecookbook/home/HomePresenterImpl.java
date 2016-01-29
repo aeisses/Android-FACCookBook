@@ -1,4 +1,4 @@
-package github.com.foodactioncommitteecookbook.main;
+package github.com.foodactioncommitteecookbook.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +13,12 @@ import github.com.foodactioncommitteecookbook.recipe.RecipeActivity;
 /**
  *
  */
-class MainPresenterImpl implements MainPresenter {
+class HomePresenterImpl implements HomePresenter {
 
-  MainView view;
+  HomeView view;
   List<Integer> featuredIds = new ArrayList<>();
 
-  MainPresenterImpl(MainView view, List<Integer> featuredIds) {
+  HomePresenterImpl(HomeView view, List<Integer> featuredIds) {
     this.view = view;
     this.featuredIds.addAll(featuredIds);
   }
