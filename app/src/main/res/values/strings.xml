@@ -13,21 +13,28 @@
     <string name="region_capebreton">Cape Breton</string>
     <string name="region_yarmouth">Yarmouth</string>
 
+    <string name="home_title">@string/app_name</string>
+
+    <string name="search_title">Find Recipes</string>
     <string name="search_hint">Find Recipes</string>
-    <string name="search_label">Search</string>
+
+    <string name="browse_title">Browse Recipes</string>
+    <string name="tab_popular">Popular</string>
+    <string name="tab_favourites">Favourites</string>
+    <string name="tab_season">In Season</string>
 
     <string name="map_currentlocation">Showing your current location</string>
 
     <string name="featured_recipe_description">Featured recipe</string>
     <string name="unknown_recipe_name">Unknown recipe</string>
 
-    <string name="action_search">Search</string>
-    <string name="action_favourites">Favourites</string>
-
-    <string name="tab_popular">Popular</string>
-    <string name="tab_favourites">Favourites</string>
-    <string name="tab_season">In Season</string>
-
     <string name="recipe_title_ingredients">Ingredients</string>
     <string name="recipe_title_directions">Directions</string>
+
+    <string name="nav_tile_home">Home</string>
+    <string name="nav_title_browse">Browse Recipes</string>
+    <string name="nav_title_search">Find Recipes</string>
+    <string name="nav_title_map">Locations</string>
+    <string name="nav_title_settings">Settings</string>
+    <string name="nav_title_about">About</string>
 </resources>

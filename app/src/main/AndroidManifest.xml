@@ -27,21 +27,9 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".list.ListActivity" />
-        <activity android:name=".LocationActivity" />
         <activity android:name=".map.MapActivity" />
         <activity android:name=".purchase.PurchaseActivity" />
         <activity android:name=".recipe.RecipeActivity" />
-        <activity
-            android:name=".search.SearchActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

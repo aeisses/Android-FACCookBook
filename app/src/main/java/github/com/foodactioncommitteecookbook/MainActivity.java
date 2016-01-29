@@ -1,8 +1,12 @@
 package github.com.foodactioncommitteecookbook;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -11,6 +15,9 @@ import android.view.MenuItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import github.com.foodactioncommitteecookbook.home.HomeFragment;
+import github.com.foodactioncommitteecookbook.list.RecipeListFragment;
+import github.com.foodactioncommitteecookbook.search.SearchFragment;
 
 
 /**
@@ -34,6 +41,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
       actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.add(R.id.main_fragment_container, new HomeFragment());
+    transaction.commit();
+
     navigationView.setNavigationItemSelectedListener(this);
   }
 
@@ -47,8 +58,35 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
   }
 
   @Override public boolean onNavigationItemSelected(MenuItem item) {
-    item.setChecked(true);
     drawerLayout.closeDrawers();
+
+    if (!item.isChecked()) {
+      item.setChecked(true);
+      switchToScreen(item.getItemId());
+    }
+
     return true;
+  }
+
+  private void switchToScreen(@IdRes int itemId) {
+    Fragment newFragment;
+
+    switch (itemId) {
+      case R.id.nav_home:
+      default:
+        newFragment = new HomeFragment();
+        break;
+      case R.id.nav_list:
+        newFragment = new RecipeListFragment();
+        break;
+      case R.id.nav_search:
+        newFragment = new SearchFragment();
+        break;
+    }
+
+    FragmentManager manager = getSupportFragmentManager();
+    FragmentTransaction transaction = manager.beginTransaction();
+    transaction.replace(R.id.main_fragment_container, newFragment);
+    transaction.commit();
   }
 }

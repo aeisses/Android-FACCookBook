@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,9 @@ public class HomeFragment extends Fragment implements HomeView {
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_home, container, false);
     ButterKnife.bind(this, view);
+
+    Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.main_toolbar);
+    toolbar.setTitle(R.string.home_title);
 
     recipeList.setLayoutManager(new GridLayoutManager(getContext(), NUM_COLUMNS));
     recipeList.addItemDecoration(new ItemDecoration(getResources().getDimensionPixelSize(R.dimen.recipe_card_spacing)));
