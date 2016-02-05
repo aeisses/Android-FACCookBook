@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
+import android.text.TextUtils;
+import android.util.SparseArray;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -258,16 +260,14 @@ public class CookbookDb extends SQLiteOpenHelper {
     }
   }
 
-  public Cursor searchForRecipes(final String query) {
+  public List<Recipe> searchForRecipes(final String query) {
     SQLiteDatabase db = getReadableDatabase();
 
-    String selection = CookbookContract.RecipeEntry.COLUMN_TITLE + " LIKE ?";
     String[] args = {"%" + query + "%"};
+    String sql = "SELECT * FROM " + CookbookContract.RecipeEntry.TABLE_NAME + " WHERE " +
+        CookbookContract.RecipeEntry.COLUMN_TITLE + " LIKE ?";
 
-    SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-    builder.setTables(CookbookContract.RecipeEntry.TABLE_NAME);
-
-    return builder.query(db, null, selection, args, null, null, null);
+    return getAllRecipes(db, sql, args);
   }
 
   public List<Location> getLocations() {
@@ -307,5 +307,138 @@ public class CookbookDb extends SQLiteOpenHelper {
       values.put(CookbookContract.LocationEntry.COLUMN_STORY, location.getStory());
       db.insert(CookbookContract.LocationEntry.TABLE_NAME, null, values);
     }
+  }
+
+  private List<Recipe> getAllRecipes(SQLiteDatabase db, String query, String[] args) {
+
+    final Cursor cursor = db.rawQuery(query, args);
+
+    if (!cursor.moveToFirst()) {
+      Timber.v("No recipes found");
+      cursor.close();
+      return new ArrayList<>(0);
+    }
+
+    SparseArray<Recipe> results = new SparseArray<>(cursor.getCount());
+    String[] ids = new String[cursor.getCount()];
+    String[] placeholders = new String[cursor.getCount()];
+
+    for (int i = 0; !cursor.isAfterLast(); ++i, cursor.moveToNext()) {
+      try {
+        Recipe recipe = new Recipe();
+        recipe.setId(cursor.getInt(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_ID)));
+        recipe.setTitle(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_TITLE)));
+        recipe.setType(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_TYPE)));
+        recipe.setSeason(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_SEASON)));
+        recipe.setAddedDate(dateFormat.parse(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_CREATED))));
+        recipe.setUpdatedDate(dateFormat.parse(cursor.getString(cursor.getColumnIndex(CookbookContract.RecipeEntry.COLUMN_MODIFIED))));
+
+        ids[i] = String.valueOf(recipe.getId());
+        placeholders[i] = "?";
+
+        results.put(recipe.getId(), recipe);
+      } catch (Exception e) {
+        Timber.w("Unable to fetch recipe", e);
+      }
+    }
+    cursor.close();
+
+    String placeHolderString = TextUtils.join(",", placeholders);
+
+    addIngredients(db, results, ids, placeHolderString);
+    addDirections(db, results, ids, placeHolderString);
+    addNotes(db, results, ids, placeHolderString);
+    addCategories(db, results, ids, placeHolderString);
+    addSearchItems(db, results, ids, placeHolderString);
+
+    return asList(results);
+  }
+
+  private void addIngredients(SQLiteDatabase database, SparseArray<Recipe> recipes, String[] ids, String placeholders) {
+    String query = "SELECT * FROM " + CookbookContract.IngredientEntry.TABLE_NAME +
+        " WHERE " + CookbookContract.IngredientEntry.COLUMN_RECIPE_ID + " IN (" + placeholders + ")";
+
+    Cursor cursor = database.rawQuery(query, ids);
+    while (cursor.moveToNext()) {
+      int id = cursor.getInt(cursor.getColumnIndex(CookbookContract.IngredientEntry.COLUMN_RECIPE_ID));
+      Recipe recipe = recipes.get(id);
+
+      Recipe.Ingredient ingredient = new Recipe.Ingredient();
+      ingredient.setAmount(cursor.getString(cursor.getColumnIndex(CookbookContract.IngredientEntry.COLUMN_AMOUNT)));
+      ingredient.setIngredient(cursor.getString(cursor.getColumnIndex(CookbookContract.IngredientEntry.COLUMN_INGREDIENT)));
+      recipe.addIngredient(ingredient);
+    }
+    cursor.close();
+  }
+
+  private void addDirections(SQLiteDatabase database, SparseArray<Recipe> recipes, String[] ids, String placeholders) {
+    String query = "SELECT * FROM " + CookbookContract.DirectionEntry.TABLE_NAME +
+        " WHERE " + CookbookContract.DirectionEntry.COLUMN_RECIPE_ID + " IN (" + placeholders + ")";
+
+    Cursor cursor = database.rawQuery(query, ids);
+
+    while (cursor.moveToNext()) {
+      int id = cursor.getInt(cursor.getColumnIndex(CookbookContract.DirectionEntry.COLUMN_RECIPE_ID));
+      Recipe recipe = recipes.get(id);
+
+      Recipe.Direction direction = new Recipe.Direction();
+      direction.setDirection(cursor.getString(cursor.getColumnIndex(CookbookContract.DirectionEntry.COLUMN_DIRECTION)));
+      recipe.addDirection(direction);
+    }
+    cursor.close();
+  }
+
+  private void addNotes(SQLiteDatabase database, SparseArray<Recipe> recipes, String[] ids, String placeholders) {
+    // Fetch notes
+    String query = "SELECT * FROM " + CookbookContract.NoteEntry.TABLE_NAME +
+        " WHERE " + CookbookContract.NoteEntry.COLUMN_RECIPE_ID + " IN (" + placeholders + ")";
+
+    Cursor cursor = database.rawQuery(query, ids);
+
+    while (cursor.moveToNext()) {
+      int id = cursor.getInt(cursor.getColumnIndex(CookbookContract.NoteEntry.COLUMN_RECIPE_ID));
+      Recipe recipe = recipes.get(id);
+
+      Recipe.Note note = new Recipe.Note();
+      note.setNote(cursor.getString(cursor.getColumnIndex(CookbookContract.NoteEntry.COLUMN_NOTE)));
+      recipe.addNote(note);
+    }
+    cursor.close();
+  }
+
+  private void addSearchItems(SQLiteDatabase database, SparseArray<Recipe> recipes, String[] ids, String placeholders) {
+    String query = "SELECT * FROM " + CookbookContract.SearchItemEntry.TABLE_NAME +
+        " WHERE " + CookbookContract.SearchItemEntry.COLUMN_RECIPE_ID + " IN (" + placeholders + ")";
+    Cursor cursor = database.rawQuery(query, ids);
+
+    while (cursor.moveToNext()) {
+      int id = cursor.getInt(cursor.getColumnIndex(CookbookContract.SearchItemEntry.COLUMN_RECIPE_ID));
+      Recipe recipe = recipes.get(id);
+
+      recipe.addSearchItems(cursor.getString(cursor.getColumnIndex(CookbookContract.SearchItemEntry.COLUMN_SEARCH_ITEM)));
+    }
+    cursor.close();
+  }
+
+  private void addCategories(SQLiteDatabase database, SparseArray<Recipe> recipes, String[] ids, String placeholders) {
+    String query = "SELECT * FROM " + CookbookContract.CategoryEntry.TABLE_NAME +
+        " WHERE " + CookbookContract.CategoryEntry.COLUMN_RECIPE_ID + " IN(" + placeholders + ")";
+
+    Cursor cursor = database.rawQuery(query, ids);
+
+    while (cursor.moveToNext()) {
+      int id = cursor.getInt(cursor.getColumnIndex(CookbookContract.CategoryEntry.COLUMN_RECIPE_ID));
+      Recipe recipe = recipes.get(id);
+      recipe.addCategory(cursor.getString(cursor.getColumnIndex(CookbookContract.CategoryEntry.COLUMN_CATEGORY)));
+    }
+    cursor.close();
+  }
+
+  public static <C> List<C> asList(SparseArray<C> sparseArray) {
+    if (sparseArray == null) return null;
+    List<C> arrayList = new ArrayList<C>(sparseArray.size());
+    for (int i = 0; i < sparseArray.size(); i++)
+      arrayList.add(sparseArray.valueAt(i));
+    return arrayList;
   }
 }

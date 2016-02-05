@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Model class for Recipes.
  */
-public class Recipe implements Serializable {
+public class Recipe implements Serializable, Comparable<Recipe> {
 
   @SerializedName("id")
   private int id;
@@ -161,6 +161,16 @@ public class Recipe implements Serializable {
       this.notes = new ArrayList<>();
     }
     this.notes.add(note);
+  }
+
+  @Override public int compareTo(Recipe recipe) {
+    if (id < recipe.id) {
+      return -1;
+    }
+    if (id > recipe.id) {
+      return 1;
+    }
+    return 0;
   }
 
   public static class Ingredient implements Serializable {

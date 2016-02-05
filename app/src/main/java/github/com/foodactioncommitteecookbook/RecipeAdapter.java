@@ -18,7 +18,7 @@ import github.com.foodactioncommitteecookbook.network.ImageHelper;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
-  private final List<Recipe> recipes;
+  private List<Recipe> recipes;
   private final SelectionListener selectionListener;
 
   public RecipeAdapter(List<Recipe> recipes, SelectionListener listener) {
@@ -42,6 +42,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
   @Override public int getItemCount() {
     return recipes.size();
+  }
+
+  public void setRecipes(List<Recipe> recipes) {
+    this.recipes = recipes;
+    notifyDataSetChanged();
   }
 
   public interface SelectionListener {
